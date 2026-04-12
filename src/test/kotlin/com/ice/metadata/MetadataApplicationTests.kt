@@ -1,15 +1,43 @@
 package com.ice.metadata
 
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
+import org.springframework.test.web.servlet.setup.MockMvcBuilders
+import org.springframework.web.context.WebApplicationContext
 
 @Import(TestcontainersConfiguration::class)
 @SpringBootTest
 class MetadataApplicationTests {
 
+	@Autowired
+	private lateinit var webApplicationContext: WebApplicationContext
+
+	private lateinit var mockMvc: MockMvc
+
+	@BeforeEach
+	fun setup() {
+		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build()
+	}
+
 	@Test
 	fun contextLoads() {
 	}
 
+	@Test
+	fun testRootEndpoint() {
+		mockMvc.perform(get("/"))
+			.andExpect(status().isOk)
+			.andExpect(content().string("Hello World"))
+	}
+
 }
+
+
+

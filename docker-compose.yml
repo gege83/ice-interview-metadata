@@ -1,0 +1,54 @@
+
+services:
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    ports:
+      - "16686:16686" # Jaeger UI
+    networks:
+      - app-network
+
+  # 2. OTel Collector (The Middleman)
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    ports:
+      - "4317:4317" # OTLP gRPC
+      - "4318:4318" # OTLP HTTP
+    volumes:
+      - ./otel-config.yaml:/etc/otel-collector-config.yaml
+    command: [ "--config=/etc/otel-collector-config.yaml" ]
+    depends_on:
+      - jaeger
+    networks:
+      - app-network
+
+  # 3. Spring Boot Application
+  app:
+    image: ice-metadata:0.0.1-SNAPSHOT
+    environment:
+      # OpenTelemetry Java Agent Configuration
+      - OTEL_SERVICE_NAME=ice-metadata
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318
+      - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+      - OTEL_METRICS_EXPORTER=otlp
+      - OTEL_TRACES_EXPORTER=otlp
+      - OTEL_TRACES_SAMPLER=always_on
+      - OTEL_PROPAGATORS=jaeger,tracecontext
+      - OTEL_JAVAAGENT_DEBUG=false
+      # Optional: to see debug logs, change to true
+      - JAVA_TOOL_OPTIONS=-javaagent:/app/opentelemetry-javaagent.jar
+    volumes:
+      - ./agent/opentelemetry-javaagent.jar:/app/opentelemetry-javaagent.jar:ro
+    depends_on:
+      - otel-collector
+    ports:
+      - "8080:8080" # Spring Boot application port
+    networks:
+      - app-network
+
+
+networks:
+  app-network:
+    driver: bridge
+

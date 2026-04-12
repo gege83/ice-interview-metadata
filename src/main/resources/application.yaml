@@ -1,3 +1,16 @@
 spring:
   application:
-    name: metadata
+    name: ice-metadata
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+
+logging:
+  level:
+    root: INFO
+    io.opentelemetry: DEBUG
+    io.opentelemetry.exporter: DEBUG
+    io.micrometer.tracing: DEBUG
+

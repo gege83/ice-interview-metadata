@@ -1,1 +1,1 @@
-rootProject.name = "metadata"
+rootProject.name = "ice-metadata"
