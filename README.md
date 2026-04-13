@@ -8,9 +8,12 @@ The service uses REST apis to expose data and perform operations on it.
 
 ## How to run the project:
 
-1. Clone the repository
-2. Run `./gradlew bootRun` in the project directory
-3. The service will be available at `http://localhost:8080` (or your configured port)
+### Terminal
+1. Run `docker compose up lgtm` to start observability tools.
+2. setup agent environment variable to enable OpenTelemetry instrumentation (optional, but recommended for better observability)
+   - `export JAVA_TOOL_OPTIONS="-javaagent:./agent/opentelemetry-javaagent.jar"`
+3. Run `./gradlew bootRun` in the project directory
+4. The service will be available at `http://localhost:8080` (or your configured port)
 
 ### Run with tracing in docker containers
 
@@ -21,6 +24,16 @@ This will start 3 containers:
 - the application (instrumented with OpenTelemetry)
 - open telementry collector (configured to receive traces from the application and export them to Jaeger)
 - Jaeger (to visualize the traces)
+
+### IntelliJ setup
+
+In the run options you can add the following environment variable to enable OpenTelemetry instrumentation (optional, but recommended for better observability):
+- `JAVA_TOOL_OPTIONS=-javaagent:./agent/opentelemetry-javaagent.jar`
+
+OR
+
+You can add the following VM options to enable OpenTelemetry instrumentation (optional, but recommended for better observability):
+- `-javaagent:./agent/opentelemetry-javaagent.jar`
 
 ## How to run the tests:
 tests are using testcontainers to run local instances of downstream services.
