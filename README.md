@@ -52,6 +52,11 @@ At the moment we have configured only one user with no special permissions, but 
 | --- | --- | --- |
 | user | password |  |
 
+
+## Architecture
+
+[see the architecture documentation](docs/architecture/architecture.md)
+
 ## Plans:
 - [x] Create a Spring Boot application and test setup
 - [ ] Create a REST controller to handle song metadata
