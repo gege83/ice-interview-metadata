@@ -1,54 +1,39 @@
-
 services:
-  jaeger:
-    image: jaegertracing/all-in-one:latest
+  lgtm:
+    image: grafana/otel-lgtm:latest
+    ports:
+      - "3000:3000" # Grafana UI
+      - "3200:3200" # tempo endpoint (MCP at http://localhost:3200/api/mcp)
+      - "4040:4040" # Pyroscope endpoint
+      - "9090:9090" # Prometheus endpoint
+      - "4317:4317" # OpenTelemetry GRPC endpoint
+      - "4318:4318" # OpenTelemetry HTTP endpoint
     environment:
-      - COLLECTOR_OTLP_ENABLED=true
-    ports:
-      - "16686:16686" # Jaeger UI
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
     networks:
       - app-network
 
-  # 2. OTel Collector (The Middleman)
-  otel-collector:
-    image: otel/opentelemetry-collector-contrib:latest
-    ports:
-      - "4317:4317" # OTLP gRPC
-      - "4318:4318" # OTLP HTTP
-    volumes:
-      - ./otel-config.yaml:/etc/otel-collector-config.yaml
-    command: [ "--config=/etc/otel-collector-config.yaml" ]
-    depends_on:
-      - jaeger
-    networks:
-      - app-network
-
-  # 3. Spring Boot Application
   app:
     image: ice-metadata:0.0.1-SNAPSHOT
     environment:
-      # OpenTelemetry Java Agent Configuration
       - OTEL_SERVICE_NAME=ice-metadata
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://lgtm:4318  # Direct to LGTM
       - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
       - OTEL_METRICS_EXPORTER=otlp
       - OTEL_TRACES_EXPORTER=otlp
       - OTEL_TRACES_SAMPLER=always_on
-      - OTEL_PROPAGATORS=jaeger,tracecontext
       - OTEL_JAVAAGENT_DEBUG=false
-      # Optional: to see debug logs, change to true
       - JAVA_TOOL_OPTIONS=-javaagent:/app/opentelemetry-javaagent.jar
     volumes:
       - ./agent/opentelemetry-javaagent.jar:/app/opentelemetry-javaagent.jar:ro
     depends_on:
-      - otel-collector
+      - lgtm
     ports:
-      - "8080:8080" # Spring Boot application port
+      - "8080:8080"
     networks:
       - app-network
-
 
 networks:
   app-network:
     driver: bridge
-
