@@ -1,7 +1,5 @@
-package com.ice.metadata
+package com.ice.metadata.track
 
-import com.ice.metadata.track.TrackMetadata
-import com.ice.metadata.track.TrackMetadataService
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.any
@@ -11,15 +9,12 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
 import org.springframework.http.MediaType
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
-import org.springframework.test.context.bean.override.mockito.MockitoBean
-
 
 @SpringBootTest
 class TrackControllerTests {
@@ -43,11 +38,11 @@ class TrackControllerTests {
 
         mockMvc
             .perform(
-                get("/tracks?artistId=123")
+                MockMvcRequestBuilders.get("/tracks?artistId=123")
             )
-            .andExpect(status().isOk)
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.content").isEmpty)
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.content").isEmpty)
     }
 
     @Test
@@ -60,13 +55,13 @@ class TrackControllerTests {
 
         mockMvc
             .perform(
-                get("/tracks?artistId=123")
+                MockMvcRequestBuilders.get("/tracks?artistId=123")
             )
-            .andExpect(status().isOk)
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.content").isNotEmpty)
-            .andExpect(jsonPath("$.content[0].id").value(trackId))
-            .andExpect(jsonPath("$.content[0].name").value(trackName))
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.content").isNotEmpty)
+            .andExpect(MockMvcResultMatchers.jsonPath("$.content[0].id").value(trackId))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.content[0].name").value(trackName))
     }
 
     @Test
@@ -78,14 +73,14 @@ class TrackControllerTests {
 
         mockMvc
             .perform(
-                get("/tracks?artistId=123&size=2")
+                MockMvcRequestBuilders.get("/tracks?artistId=123&size=2")
             )
-            .andExpect(status().isOk)
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.content[0].id").value("1"))
-            .andExpect(jsonPath("$.content[1].id").value("2"))
-            .andExpect(jsonPath("$.content[2]").doesNotExist())
-            .andExpect(jsonPath("$.size").value("2"))
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.content[0].id").value("1"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.content[1].id").value("2"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.content[2]").doesNotExist())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.size").value("2"))
 
     }
 
