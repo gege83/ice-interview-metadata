@@ -2,16 +2,12 @@ package com.ice.metadata.track
 
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.kotlin.any
-import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.data.domain.PageImpl
-import org.springframework.data.domain.Pageable
 import org.springframework.http.MediaType
-import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
@@ -23,8 +19,8 @@ class TrackControllerTests {
 
     private lateinit var mockMvc: MockMvc
 
-    @MockitoBean
-    private lateinit var trackMetadataService: TrackMetadataService
+    @Autowired
+    private lateinit var trackMetadataRepository: TrackMetadataRepository
 
     @BeforeEach
     fun setup() {
@@ -33,8 +29,7 @@ class TrackControllerTests {
 
     @Test
     fun `Get tracks for the artist when no tracks are found`() {
-        whenever(trackMetadataService.findTracksByArtistId(any(), any()))
-            .thenReturn(PageImpl(emptyList()))
+        trackMetadataRepository.deleteAll()
 
         mockMvc
             .perform(
@@ -50,13 +45,14 @@ class TrackControllerTests {
         val trackId = "321"
         val trackName = "Test track"
         val track = buildTrack(id = trackId, name = trackName)
-        whenever(trackMetadataService.findTracksByArtistId(any(), any()))
-            .thenReturn(PageImpl(listOf(track)))
+        trackMetadataRepository.deleteAll()
+        trackMetadataRepository.save(track)
 
         mockMvc
             .perform(
                 MockMvcRequestBuilders.get("/tracks?artistId=123")
             )
+            .andDo(MockMvcResultHandlers.print())
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(MockMvcResultMatchers.jsonPath("$.content").isNotEmpty)
@@ -68,8 +64,9 @@ class TrackControllerTests {
     fun `Get tracks for the artist when there are more than a page and return page size only`() {
         val track1 = buildTrack(id = "1")
         val track2 = buildTrack(id = "2")
-        whenever(trackMetadataService.findTracksByArtistId(any(), any()))
-            .thenReturn(PageImpl(listOf(track1, track2), Pageable.ofSize(2), 3))
+        val track3 = buildTrack(id = "3")
+        trackMetadataRepository.deleteAll()
+        trackMetadataRepository.saveAll(listOf(track1, track2, track3))
 
         mockMvc
             .perform(
@@ -80,7 +77,7 @@ class TrackControllerTests {
             .andExpect(MockMvcResultMatchers.jsonPath("$.content[0].id").value("1"))
             .andExpect(MockMvcResultMatchers.jsonPath("$.content[1].id").value("2"))
             .andExpect(MockMvcResultMatchers.jsonPath("$.content[2]").doesNotExist())
-            .andExpect(MockMvcResultMatchers.jsonPath("$.size").value("2"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.page.size").value("2"))
 
     }
 

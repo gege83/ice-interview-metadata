@@ -31,7 +31,7 @@ class TrackMetadataServiceTests {
         @Test
         fun `Should return no tracks when artist has no tracks`() {
             val artistId = "123"
-            whenever(trackMetadataRepository.findTracksByArtistId(any(), any())).thenReturn(PageImpl(emptyList()))
+            whenever(trackMetadataRepository.findByArtistId(any(), any())).thenReturn(PageImpl(emptyList()))
             val tracks = service.findTracksByArtistId(artistId, Pageable.ofSize(10))
             assert(tracks.content.isEmpty())
         }
@@ -39,7 +39,7 @@ class TrackMetadataServiceTests {
         @Test
         fun `Should return all tracks when artist has less than page tracks`() {
             val artistId = "123"
-            whenever(trackMetadataRepository.findTracksByArtistId(any(), any()))
+            whenever(trackMetadataRepository.findByArtistId(any(), any()))
                 .thenReturn(PageImpl(listOf(buildTrack(), buildTrack())))
             val tracks = service.findTracksByArtistId(artistId, Pageable.ofSize(10))
             assertEquals(2, tracks.content.count())
@@ -49,11 +49,11 @@ class TrackMetadataServiceTests {
         fun `Should return all tracks when artist has more than page tracks`() {
             val artistId = "1233"
             val content = (1..10).map { buildTrack() }
-            whenever(trackMetadataRepository.findTracksByArtistId(any(), any()))
+            whenever(trackMetadataRepository.findByArtistId(any(), any()))
                 .thenReturn(PageImpl(content))
             val tracks = service.findTracksByArtistId(artistId, Pageable.ofSize(10))
             assertEquals(10, tracks.content.count())
-            verify(trackMetadataRepository).findTracksByArtistId(artistId, Pageable.ofSize(10))
+            verify(trackMetadataRepository).findByArtistId(artistId, Pageable.ofSize(10))
         }
     }
 }

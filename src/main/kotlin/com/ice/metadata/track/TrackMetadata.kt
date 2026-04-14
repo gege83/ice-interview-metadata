@@ -1,19 +1,19 @@
 package com.ice.metadata.track
 
-import org.springframework.data.annotation.Id
+import jakarta.persistence.*
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
-import org.springframework.data.relational.core.mapping.Table
-import org.springframework.data.repository.CrudRepository
+import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Component
 import org.springframework.stereotype.Repository
 
-@Table
+@Entity
 data class TrackMetadata(
-    @Id val id: String,
+    @Id
+    val id: String,
     val name: String,
-    val artistId: String) {
-}
+    val artistId: String
+)
 
 interface TrackMetadataService {
     fun findTracksByArtistId(artistId: String, pageable: Pageable): Page<TrackMetadata>
@@ -25,13 +25,11 @@ class TrackMetadataServiceImpl(val trackMetadataRepository: TrackMetadataReposit
         artistId: String,
         pageable: Pageable
     ): Page<TrackMetadata> {
-        return trackMetadataRepository.findTracksByArtistId(artistId, pageable)
+        return trackMetadataRepository.findByArtistId(artistId, pageable)
     }
 }
 
 @Repository
-interface TrackMetadataRepository: CrudRepository<TrackMetadata, String> {
-    fun findTracksByArtistId(artistId: String, pageable: Pageable): Page<TrackMetadata>
+interface TrackMetadataRepository : JpaRepository<TrackMetadata, String> {
+    fun findByArtistId(artistId: String, pageable: Pageable): Page<TrackMetadata>
 }
-
-
