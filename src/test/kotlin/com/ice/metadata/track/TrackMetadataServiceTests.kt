@@ -12,6 +12,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
+import java.util.Optional
 import kotlin.test.assertEquals
 
 @ExtendWith(MockitoExtension::class)
@@ -79,6 +80,37 @@ class TrackMetadataServiceTests {
 
             assertThrows<TrackIdAlreadyExistsException> {
                 service.create(track)
+            }
+        }
+    }
+
+    @Nested
+    inner class UpdateExistingTrackForArtistTests {
+        @Test
+        fun `Should update existing track`() {
+            val artistId = "2345"
+            val trackId = "track id"
+            val originalTrack = buildTrack(artistId = artistId, name = "some name", id = trackId)
+            val newName = "new Name"
+            val updateTrack = buildTrack(artistId = artistId, name = newName, id = trackId)
+
+            whenever(trackMetadataRepository.findById(trackId)).thenReturn(Optional.of(originalTrack))
+            whenever(trackMetadataRepository.save(updateTrack))
+                .thenReturn(updateTrack)
+            val savedTrack: TrackMetadata = service.update(updateTrack)
+            assertEquals(newName, savedTrack.name)
+        }
+
+        @Test
+        fun `Should throw not existing exception if track doesn't exist`() {
+            val artistId = "2345"
+            val trackId = "track id"
+            val newName = "new Name"
+            val updateTrack = buildTrack(artistId = artistId, name = newName, id = trackId)
+
+            whenever(trackMetadataRepository.findById(trackId)).thenReturn(Optional.empty())
+            assertThrows<TrackDoesNotExistException> {
+                service.update(updateTrack)
             }
         }
     }
