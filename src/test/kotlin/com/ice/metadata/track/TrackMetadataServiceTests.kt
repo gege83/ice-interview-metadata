@@ -3,6 +3,7 @@ package com.ice.metadata.track
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mock
 import org.mockito.junit.jupiter.MockitoExtension
@@ -54,6 +55,31 @@ class TrackMetadataServiceTests {
             val tracks = service.findTracksByArtistId(artistId, Pageable.ofSize(10))
             assertEquals(10, tracks.content.count())
             verify(trackMetadataRepository).findByArtistId(artistId, Pageable.ofSize(10))
+        }
+    }
+
+    @Nested
+    inner class CreateNewTracksForArtistTests {
+        @Test
+        fun `Should create new track when there is no track`() {
+            val artistId = "2345"
+            val track = buildTrack(artistId = artistId, id = null)
+            val generatedId = "generatedId"
+            whenever(trackMetadataRepository.save(track))
+                .thenReturn(track.copy(id = generatedId))
+            val savedTrack: TrackMetadata = service.create(track)
+            assertEquals("generatedId", savedTrack.id)
+            assertEquals(artistId, savedTrack.artistId)
+        }
+
+        @Test
+        fun `Should throw exception when id is not null when creating a new track`() {
+            val artistId = "2345"
+            val track = buildTrack(artistId = artistId, id = "alreadyExistingId")
+
+            assertThrows<TrackIdAlreadyExistsException> {
+                service.create(track)
+            }
         }
     }
 }

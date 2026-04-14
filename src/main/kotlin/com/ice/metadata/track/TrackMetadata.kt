@@ -10,13 +10,15 @@ import org.springframework.stereotype.Repository
 @Entity
 data class TrackMetadata(
     @Id
-    val id: String,
+    @GeneratedValue(strategy = GenerationType.UUID)
+    val id: String?,
     val name: String,
     val artistId: String
 )
 
 interface TrackMetadataService {
     fun findTracksByArtistId(artistId: String, pageable: Pageable): Page<TrackMetadata>
+    fun create(track: TrackMetadata): TrackMetadata
 }
 
 @Component
@@ -27,6 +29,16 @@ class TrackMetadataServiceImpl(val trackMetadataRepository: TrackMetadataReposit
     ): Page<TrackMetadata> {
         return trackMetadataRepository.findByArtistId(artistId, pageable)
     }
+
+    override fun create(track: TrackMetadata): TrackMetadata {
+        if(track.id != null) {
+            throw TrackIdAlreadyExistsException("Track id must be null when creating a new track")
+        }
+        return trackMetadataRepository.save(track)
+    }
+}
+
+class TrackIdAlreadyExistsException(message: String) : RuntimeException(message) {
 }
 
 @Repository
