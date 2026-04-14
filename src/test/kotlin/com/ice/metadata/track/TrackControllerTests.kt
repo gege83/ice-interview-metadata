@@ -84,8 +84,4 @@ class TrackControllerTests {
 
     }
 
-    private fun buildTrack(id: String = "123", name: String = "Waiting all night"): TrackMetadata {
-        return TrackMetadata(id = id, name = name)
-    }
-
 }
