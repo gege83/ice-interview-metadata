@@ -144,46 +144,6 @@ class TrackControllerTests {
     }
 
     @Test
-    fun `Update track metadata should increment version`() {
-        val track = trackMetadataRepository.save(buildTrack())
-        val initialVersion = track.version
-        val updateTrackRequest = buildUpdateTrackRequest(artistId = track.artistId, name = "Updated Name", version = track.version)
-
-        mockMvc
-            .perform(
-                put("/tracks/${track.id}")
-                    .with(httpBasic("artist1", "password"))
-                    .with(csrf())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(updateTrackRequest))
-            )
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$.name").value("Updated Name"))
-            .andExpect(jsonPath("$.version").value(initialVersion + 1))
-    }
-
-    @Test
-    fun `Update track metadata with old version should fail with optimistic locking error`() {
-        val track = trackMetadataRepository.save(buildTrack())
-        
-        // Simulating the track being updated by someone else
-        trackMetadataRepository.save(track.copy(name = "Intervening update"))
-        
-        // Now try to update with the original version
-        val updateTrackRequest = buildUpdateTrackRequest(artistId = track.artistId, name = "My stale update", version = track.version)
-
-        mockMvc
-            .perform(
-                put("/tracks/${track.id}")
-                    .with(httpBasic("artist1", "password"))
-                    .with(csrf())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(updateTrackRequest))
-            )
-            .andExpect(status().isConflict) // Handled by GlobalExceptionHandler
-    }
-
-    @Test
     fun `Create a new track for an artist with more details`() {
         val createTrackRequest = buildCreateTrackRequest(
             artistId = "1233",
@@ -205,5 +165,61 @@ class TrackControllerTests {
             .andExpect(jsonPath("$.name").value("Feeling good"))
             .andExpect(jsonPath("$.length").value(237))
             .andExpect(jsonPath("$.genre").value("Jazz"))
+    }
+
+    @Test
+    fun `Update track metadata should increment version`() {
+        val track = trackMetadataRepository.save(buildTrack())
+        val initialVersion = track.version
+        val updateTrackRequest = buildUpdateTrackRequest(artistId = track.artistId, name = "Updated Name", version = track.version)
+
+        mockMvc
+            .perform(
+                put("/tracks/${track.id}")
+                    .with(httpBasic("artist1", "password"))
+                    .with(csrf())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(updateTrackRequest))
+            )
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.name").value("Updated Name"))
+            .andExpect(jsonPath("$.version").value(initialVersion + 1))
+    }
+
+    @Test
+    fun `Update track metadata with old version should fail with optimistic locking error`() {
+        val track = trackMetadataRepository.save(buildTrack())
+
+        // Simulating the track being updated by someone else
+        trackMetadataRepository.save(track.copy(name = "Intervening update"))
+
+        // Now try to update with the original version
+        val updateTrackRequest = buildUpdateTrackRequest(artistId = track.artistId, name = "My stale update", version = track.version)
+
+        mockMvc
+            .perform(
+                put("/tracks/${track.id}")
+                    .with(httpBasic("artist1", "password"))
+                    .with(csrf())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(updateTrackRequest))
+            )
+            .andExpect(status().isConflict) // Handled by GlobalExceptionHandler
+    }
+
+    @Test
+    fun `Update fails if id not found`() {
+        val trackId = "non-existent-id"
+        val updateTrackRequest = buildUpdateTrackRequest()
+
+        mockMvc
+            .perform(
+                put("/tracks/${trackId}")
+                    .with(httpBasic("artist1", "password"))
+                    .with(csrf())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(updateTrackRequest))
+            )
+            .andExpect(status().isNotFound) // Handled by GlobalExceptionHandler
     }
 }

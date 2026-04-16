@@ -1,5 +1,7 @@
 package com.ice.metadata.track
 
+import com.ice.metadata.utils.ConflictExceptions
+import com.ice.metadata.utils.DoesNotExistsExceptions
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.orm.ObjectOptimisticLockingFailureException
@@ -52,7 +54,7 @@ class TrackMetadataServiceImpl(val trackMetadataRepository: TrackMetadataReposit
     override fun update(id: String, updateTrack: UpdateTrackRequest): TrackMetadata {
         val existingTrack = trackMetadataRepository
             .findById(id)
-            .orElseThrow { TrackDoesNotExistException("Track with id $id not found") }
+            .orElseThrow { TrackDoesNotExistException(id) }
         val trackToSave = existingTrack.copy(
             name = updateTrack.name ?: existingTrack.name,
             artistId = updateTrack.artistId ?: existingTrack.artistId,
@@ -64,12 +66,11 @@ class TrackMetadataServiceImpl(val trackMetadataRepository: TrackMetadataReposit
             //TODO send notification about the track change to save history
             return trackMetadataRepository.save(trackToSave)
         } catch (_: ObjectOptimisticLockingFailureException) {
-            throw TrackHasBeenModifiedException("The record you attempted to edit was modified by another user. Please reload the data and try again.")
+            throw TrackHasBeenModifiedException(id)
         }
     }
 }
 
-class TrackDoesNotExistException(message: String) : RuntimeException(message)
-
-class TrackHasBeenModifiedException(message: String) : RuntimeException(message)
+class TrackDoesNotExistException(id: String) : DoesNotExistsExceptions(id, entityName = "Track")
+class TrackHasBeenModifiedException(id: String) : ConflictExceptions(id, entityName = "Track")
 
