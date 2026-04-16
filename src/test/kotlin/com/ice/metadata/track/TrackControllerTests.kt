@@ -49,6 +49,18 @@ class TrackControllerTests {
     }
 
     @Test
+    fun `Get tracks for the artist when no tracks are found with artist role`() {
+        mockMvc
+            .perform(
+                get("/tracks?artistId=123")
+                    .with(httpBasic("artist2", "password"))
+            )
+            .andExpect(status().isOk)
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.content").isEmpty)
+    }
+
+    @Test
     fun `Get tracks for the artist when there are less than a page`() {
         val trackName = "Test track"
         val artistId = "123"

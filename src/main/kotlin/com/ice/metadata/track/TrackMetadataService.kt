@@ -1,27 +1,12 @@
 package com.ice.metadata.track
 
-import jakarta.persistence.*
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
-import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.orm.ObjectOptimisticLockingFailureException
 import org.springframework.stereotype.Component
-import org.springframework.stereotype.Repository
-
-@Entity
-data class TrackMetadata(
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    val id: String?,
-    val name: String,
-    val artistId: String,
-    val length: Long,
-    val genre: String? = null,
-    @Version
-    val version: Long = 0
-)
 
 interface TrackMetadataService {
+    // For simplicity, we will return track metadata.
     fun findTracksByArtistId(artistId: String, pageable: Pageable): Page<TrackMetadata>
     fun create(newTrack: CreateTrackRequest): TrackMetadata
     fun update(id: String, updateTrack: UpdateTrackRequest): TrackMetadata
@@ -84,13 +69,7 @@ class TrackMetadataServiceImpl(val trackMetadataRepository: TrackMetadataReposit
     }
 }
 
-class TrackIdAlreadyExistsException(message: String) : RuntimeException(message)
-
 class TrackDoesNotExistException(message: String) : RuntimeException(message)
 
 class TrackHasBeenModifiedException(message: String) : RuntimeException(message)
 
-@Repository
-interface TrackMetadataRepository : JpaRepository<TrackMetadata, String> {
-    fun findByArtistId(artistId: String, pageable: Pageable): Page<TrackMetadata>
-}
