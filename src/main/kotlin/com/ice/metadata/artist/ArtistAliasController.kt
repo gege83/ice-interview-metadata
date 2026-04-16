@@ -1,5 +1,6 @@
 package com.ice.metadata.artist
 
+import org.springframework.security.access.annotation.Secured
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.web.bind.annotation.GetMapping
@@ -19,6 +20,7 @@ class ArtistAliasController(val artistAliasService: ArtistAliasService) {
     }
 
     @PostMapping
+    @Secured("ROLE_ARTIST")
     fun createArtistAliasForUser(
         @AuthenticationPrincipal userDetails: UserDetails,
         @RequestBody artistAliasDetails: CreateArtistAliasRequest
@@ -27,7 +29,8 @@ class ArtistAliasController(val artistAliasService: ArtistAliasService) {
     }
 
     @PutMapping("/{artistId}")
-    fun createArtistAliasForUser(
+    @Secured("ROLE_ARTIST")
+    fun updateArtistAliasForUser(
         @AuthenticationPrincipal userDetails: UserDetails,
         @PathVariable artistId: String,
         @RequestBody artistAliasDetails: UpdateArtistAliasRequest
