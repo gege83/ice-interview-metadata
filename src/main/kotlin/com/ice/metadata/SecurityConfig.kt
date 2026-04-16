@@ -20,7 +20,18 @@ class SecurityConfig {
             .roles("USER")
             .build()
 
-        return InMemoryUserDetailsManager(user)
+        val artist1 = User.withDefaultPasswordEncoder()
+            .username("artist1")
+            .password("password")
+            .roles("ARTIST")
+            .build()
+        val artist2 = User.withDefaultPasswordEncoder()
+            .username("artist2")
+            .password("password")
+            .roles("ARTIST")
+            .build()
+
+        return InMemoryUserDetailsManager(user, artist1, artist2)
     }
 
 }

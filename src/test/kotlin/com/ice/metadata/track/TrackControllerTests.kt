@@ -118,7 +118,7 @@ class TrackControllerTests {
         val responseString = mockMvc
             .perform(
                 post("/tracks")
-                    .with(httpBasic("user", "password"))
+                    .with(httpBasic("artist1", "password"))
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(createTrackRequest))
@@ -140,7 +140,7 @@ class TrackControllerTests {
         mockMvc
             .perform(
                 put("/tracks/${track.id}")
-                    .with(httpBasic("user", "password"))
+                    .with(httpBasic("artist1", "password"))
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(updateTrackRequest))
@@ -163,7 +163,7 @@ class TrackControllerTests {
         mockMvc
             .perform(
                 put("/tracks/${track.id}")
-                    .with(httpBasic("user", "password"))
+                    .with(httpBasic("artist1", "password"))
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(updateTrackRequest))
@@ -183,7 +183,7 @@ class TrackControllerTests {
         mockMvc
             .perform(
                 post("/tracks")
-                    .with(httpBasic("user", "password"))
+                    .with(httpBasic("artist1", "password"))
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(createTrackRequest))

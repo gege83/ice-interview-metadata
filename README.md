@@ -48,9 +48,11 @@ To avoid the complexity of an authenticator service this application is using pr
 you can check the `SecurityConfig` class for the user details configuration.
 At the moment we have configured only one user with no special permissions, but we can easily add more users with different roles and permissions if needed.
 
-| username | password | role |
-| --- | --- | --- |
-| user | password |  |
+| username | password | role              |
+|----------| --- |-------------------|
+| user     | password | unregistered user |
+| artist1  | password | registered artist |
+| artist2  | password | reigstered artist |
 
 
 ## Extra docs
