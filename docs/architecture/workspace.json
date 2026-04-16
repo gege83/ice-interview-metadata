@@ -3,7 +3,7 @@
   "description" : "Design for ICE interview exercise",
   "documentation" : { },
   "id" : 1,
-  "lastModifiedDate" : "2026-04-16T09:03:09Z",
+  "lastModifiedDate" : "2026-04-16T20:37:54Z",
   "model" : {
     "people" : [ {
       "description" : "Music Owner",
@@ -13,31 +13,31 @@
         "structurizr.dsl.identifier" : "a"
       },
       "relationships" : [ {
-        "description" : "Manage my music metadata",
+        "description" : "Manage my music metadata in",
         "destinationId" : "4",
         "id" : "7",
         "sourceId" : "1",
         "tags" : "Relationship"
       }, {
-        "description" : "Add music metadata to a catalogue",
+        "description" : "Add music metadata to a catalogue in",
         "destinationId" : "5",
         "id" : "8",
         "sourceId" : "1",
         "tags" : "Relationship"
       }, {
-        "description" : "Edit my musics metadata",
+        "description" : "Edit my musics metadata in",
         "destinationId" : "5",
         "id" : "9",
         "sourceId" : "1",
         "tags" : "Relationship"
       }, {
-        "description" : "Manage artist alias",
+        "description" : "Manage artist alias in",
         "destinationId" : "5",
         "id" : "10",
         "sourceId" : "1",
         "tags" : "Relationship"
       }, {
-        "description" : "Fetch my musics metadata",
+        "description" : "Fetch my musics metadata from",
         "destinationId" : "5",
         "id" : "11",
         "sourceId" : "1",
@@ -115,7 +115,7 @@
       } ],
       "documentation" : { },
       "id" : "4",
-      "name" : "Music metadata",
+      "name" : "Music metadata system",
       "properties" : {
         "structurizr.dsl.identifier" : "ss"
       },
@@ -133,7 +133,7 @@
   "name" : "ICE Interview",
   "properties" : {
     "structurizr.inspection.error" : "17",
-    "structurizr.dsl" : "d29ya3NwYWNlICJJQ0UgSW50ZXJ2aWV3IiAiRGVzaWduIGZvciBJQ0UgaW50ZXJ2aWV3IGV4ZXJjaXNlIiB7CgogICAgIWlkZW50aWZpZXJzIGhpZXJhcmNoaWNhbAoKICAgIG1vZGVsIHsKICAgICAgICBhID0gcGVyc29uICJBcnRpc3QiICJNdXNpYyBPd25lciIKICAgICAgICB1ID0gcGVyc29uICJVc2VyIiAiQnJvd3N3ZXMgbXVzaWMgcmVjb3JkIgogICAgICAgIGRsID0gc29mdHdhcmVTeXN0ZW0gIkRhdGEgTGFrZSIgewogICAgICAgICAgICB0YWdzICJFeHRlcm5hbCIKICAgICAgICB9CiAgICAgICAgc3MgPSBzb2Z0d2FyZVN5c3RlbSAiTXVzaWMgbWV0YWRhdGEiIHsKICAgICAgICAgICAgd2EgPSBjb250YWluZXIgIldlYiBBcHBsaWNhdGlvbiIKICAgICAgICAgICAgZGIgPSBjb250YWluZXIgIk1ldGFkYXRhIHN0b3JhZ2UiICJwb3N0Z3JlU1FMIGRhdGFiYXNlIiB7CiAgICAgICAgICAgICAgICB0YWdzICJEYXRhYmFzZSIKICAgICAgICAgICAgfQogICAgICAgIH0KCiAgICAgICAgYSAtPiBzcyAiTWFuYWdlIG15IG11c2ljIG1ldGFkYXRhIgogICAgICAgIGEgLT4gc3Mud2EgIkFkZCBtdXNpYyBtZXRhZGF0YSB0byBhIGNhdGFsb2d1ZSIKICAgICAgICBhIC0+IHNzLndhICJFZGl0IG15IG11c2ljcyBtZXRhZGF0YSIKICAgICAgICBhIC0+IHNzLndhICJNYW5hZ2UgYXJ0aXN0IGFsaWFzIgogICAgICAgIGEgLT4gc3Mud2EgIkZldGNoIG15IG11c2ljcyBtZXRhZGF0YSIKICAgICAgICB1IC0+IHNzLndhICJGZXRjaCBhcnRpc3Qgb2YgdGhlIGRheSBmcm9tIgogICAgICAgIHUgLT4gc3Mud2EgIkZldGNoIG11c2ljIG1ldGFkYXRhIGZyb20iCiAgICAgICAgc3Mud2EgLT4gc3MuZGIgIlJlYWRzIGZyb20gYW5kIHdyaXRlcyB0byIKICAgICAgICBzcy53YSAtPiBkbCAiU2VuZHMgbXVzaWMgbWV0YWRhdGEgY2hhbmdlcyB0byIgInZpYSBtZXNzYWdpbmcgcXVldWUiCiAgICB9CgogICAgdmlld3MgewoKICAgICAgICBzeXN0ZW1Db250ZXh0IHNzICJTeXN0ZW1Db250ZXh0IiAiV2UgYXJlIGZvY3VzaW5nIG9uIHRoZSBtdXNpYyBtZXRhZGF0YSBzeXN0ZW0uIFdlIGFyZSBhc3N1bWluZyB0aGF0IGFsbCByZXF1ZXN0cyBhcmUgZ29pbmcgdGhyb3VnaCBhbiBhcGkgZ2F0ZXdheSB0aGF0IHdpbGwgZm9yY2UgYXV0aGVudGljYXRpb24gd2hlbiBpdCBuZWVkcyB0byBhbmQgc2VuZHMgYW4gYXV0aGVudGljYXRpb24gdG9rZW4gdG8gdGhlIG11c2ljIG1ldGFkYXRhIHN5c3RlbSIgewogICAgICAgICAgICBpbmNsdWRlICoKICAgICAgICB9CgogICAgICAgIGNvbnRhaW5lciBzcyAiQ29udGFpbmVyIiB7CiAgICAgICAgICAgIGluY2x1ZGUgKgogICAgICAgIH0KCiAgICAgICAgc3R5bGVzIHsKICAgICAgICAgICAgZWxlbWVudCAiRWxlbWVudCIgewogICAgICAgICAgICAgICAgY29sb3IgIzA3NzNhZgogICAgICAgICAgICAgICAgc3Ryb2tlICMwNzczYWYKICAgICAgICAgICAgICAgIHN0cm9rZVdpZHRoIDcKICAgICAgICAgICAgICAgIHNoYXBlIHJvdW5kZWRib3gKICAgICAgICAgICAgfQogICAgICAgICAgICBlbGVtZW50ICJQZXJzb24iIHsKICAgICAgICAgICAgICAgIHNoYXBlIHBlcnNvbgogICAgICAgICAgICB9CiAgICAgICAgICAgIGVsZW1lbnQgIkRhdGFiYXNlIiB7CiAgICAgICAgICAgICAgICBzaGFwZSBjeWxpbmRlcgogICAgICAgICAgICB9CiAgICAgICAgICAgIGVsZW1lbnQgIkJvdW5kYXJ5IiB7CiAgICAgICAgICAgICAgICBzdHJva2VXaWR0aCA1CiAgICAgICAgICAgIH0KICAgICAgICAgICAgcmVsYXRpb25zaGlwICJSZWxhdGlvbnNoaXAiIHsKICAgICAgICAgICAgICAgIHRoaWNrbmVzcyA0CiAgICAgICAgICAgIH0KICAgICAgICB9CiAgICB9Cgp9",
+    "structurizr.dsl" : "d29ya3NwYWNlICJJQ0UgSW50ZXJ2aWV3IiAiRGVzaWduIGZvciBJQ0UgaW50ZXJ2aWV3IGV4ZXJjaXNlIiB7CgogICAgIWlkZW50aWZpZXJzIGhpZXJhcmNoaWNhbAoKICAgIG1vZGVsIHsKICAgICAgICBhID0gcGVyc29uICJBcnRpc3QiICJNdXNpYyBPd25lciIKICAgICAgICB1ID0gcGVyc29uICJVc2VyIiAiQnJvd3N3ZXMgbXVzaWMgcmVjb3JkIgogICAgICAgIGRsID0gc29mdHdhcmVTeXN0ZW0gIkRhdGEgTGFrZSIgewogICAgICAgICAgICB0YWdzICJFeHRlcm5hbCIKICAgICAgICB9CiAgICAgICAgc3MgPSBzb2Z0d2FyZVN5c3RlbSAiTXVzaWMgbWV0YWRhdGEgc3lzdGVtIiB7CiAgICAgICAgICAgIHdhID0gY29udGFpbmVyICJXZWIgQXBwbGljYXRpb24iCiAgICAgICAgICAgIGRiID0gY29udGFpbmVyICJNZXRhZGF0YSBzdG9yYWdlIiAicG9zdGdyZVNRTCBkYXRhYmFzZSIgewogICAgICAgICAgICAgICAgdGFncyAiRGF0YWJhc2UiCiAgICAgICAgICAgIH0KICAgICAgICB9CgogICAgICAgIGEgLT4gc3MgIk1hbmFnZSBteSBtdXNpYyBtZXRhZGF0YSBpbiIKICAgICAgICBhIC0+IHNzLndhICJBZGQgbXVzaWMgbWV0YWRhdGEgdG8gYSBjYXRhbG9ndWUgaW4iCiAgICAgICAgYSAtPiBzcy53YSAiRWRpdCBteSBtdXNpY3MgbWV0YWRhdGEgaW4iCiAgICAgICAgYSAtPiBzcy53YSAiTWFuYWdlIGFydGlzdCBhbGlhcyBpbiIKICAgICAgICBhIC0+IHNzLndhICJGZXRjaCBteSBtdXNpY3MgbWV0YWRhdGEgZnJvbSIKICAgICAgICB1IC0+IHNzLndhICJGZXRjaCBhcnRpc3Qgb2YgdGhlIGRheSBmcm9tIgogICAgICAgIHUgLT4gc3Mud2EgIkZldGNoIG11c2ljIG1ldGFkYXRhIGZyb20iCiAgICAgICAgc3Mud2EgLT4gc3MuZGIgIlJlYWRzIGZyb20gYW5kIHdyaXRlcyB0byIKICAgICAgICBzcy53YSAtPiBkbCAiU2VuZHMgbXVzaWMgbWV0YWRhdGEgY2hhbmdlcyB0byIgInZpYSBtZXNzYWdpbmcgcXVldWUiCiAgICB9CgogICAgdmlld3MgewoKICAgICAgICBzeXN0ZW1Db250ZXh0IHNzICJTeXN0ZW1Db250ZXh0IiAiV2UgYXJlIGZvY3VzaW5nIG9uIHRoZSBtdXNpYyBtZXRhZGF0YSBzeXN0ZW0uIFdlIGFyZSBhc3N1bWluZyB0aGF0IGFsbCByZXF1ZXN0cyBhcmUgZ29pbmcgdGhyb3VnaCBhbiBhcGkgZ2F0ZXdheSB0aGF0IHdpbGwgZm9yY2UgYXV0aGVudGljYXRpb24gd2hlbiBpdCBuZWVkcyB0byBhbmQgc2VuZHMgYW4gYXV0aGVudGljYXRpb24gdG9rZW4gdG8gdGhlIG11c2ljIG1ldGFkYXRhIHN5c3RlbSIgewogICAgICAgICAgICBpbmNsdWRlICoKICAgICAgICB9CgogICAgICAgIGNvbnRhaW5lciBzcyAiQ29udGFpbmVyIiB7CiAgICAgICAgICAgIGluY2x1ZGUgKgogICAgICAgIH0KCiAgICAgICAgc3R5bGVzIHsKICAgICAgICAgICAgZWxlbWVudCAiRWxlbWVudCIgewogICAgICAgICAgICAgICAgY29sb3IgIzA3NzNhZgogICAgICAgICAgICAgICAgc3Ryb2tlICMwNzczYWYKICAgICAgICAgICAgICAgIHN0cm9rZVdpZHRoIDcKICAgICAgICAgICAgICAgIHNoYXBlIHJvdW5kZWRib3gKICAgICAgICAgICAgfQogICAgICAgICAgICBlbGVtZW50ICJQZXJzb24iIHsKICAgICAgICAgICAgICAgIHNoYXBlIHBlcnNvbgogICAgICAgICAgICB9CiAgICAgICAgICAgIGVsZW1lbnQgIkRhdGFiYXNlIiB7CiAgICAgICAgICAgICAgICBzaGFwZSBjeWxpbmRlcgogICAgICAgICAgICB9CiAgICAgICAgICAgIGVsZW1lbnQgIkJvdW5kYXJ5IiB7CiAgICAgICAgICAgICAgICBzdHJva2VXaWR0aCA1CiAgICAgICAgICAgIH0KICAgICAgICAgICAgcmVsYXRpb25zaGlwICJSZWxhdGlvbnNoaXAiIHsKICAgICAgICAgICAgICAgIHRoaWNrbmVzcyA0CiAgICAgICAgICAgIH0KICAgICAgICB9CiAgICB9Cgp9",
     "structurizr.inspection.info" : "0",
     "structurizr.inspection.ignore" : "0",
     "structurizr.inspection.warning" : "0"
@@ -188,7 +188,7 @@
       } ],
       "externalSoftwareSystemBoundariesVisible" : false,
       "key" : "Container",
-      "name" : "Container View: Music metadata",
+      "name" : "Container View: Music metadata system",
       "order" : 2,
       "relationships" : [ {
         "id" : "10"
@@ -230,7 +230,7 @@
       } ],
       "enterpriseBoundaryVisible" : true,
       "key" : "SystemContext",
-      "name" : "System Context View: Music metadata",
+      "name" : "System Context View: Music metadata system",
       "order" : 1,
       "relationships" : [ {
         "id" : "13"

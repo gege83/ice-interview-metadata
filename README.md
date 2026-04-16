@@ -6,14 +6,30 @@ This project is a service that stores song metadata such as title, artist, lengt
 
 The service uses REST apis to expose data and perform operations on it.
 
-## How to run the project:
+## Application Details
+The application will be available at `http://localhost:8080` after running the project. 
+See the `How to run the project` section for more details.
+
+Visit `/` to see a simple demo application
+There are 3 endpoint groups:
+- `/tracks` to manage track metadata
+   - `GET /tracks?artistId={id}` to fetch all tracks for a given artist id
+   - `POST /tracks` to create a new track metadata.
+   - `PUT /tracks/{id}` to update a track metadata.
+- `/artists` to manage artist alias
+   - `GET /artists` to fetch the alias of the logged-in user.
+   - `POST /artists` to create a new alias for logged-in user.
+   - `PUT /artists/{id}` to update the alias of the logged-in user.
+- `GET /public/artist-of-the-day` to get the artist of the day
+
+
+## How to run the project
 
 ### Terminal
 1. Run `docker compose up lgtm` to start observability tools.
 2. setup agent environment variable to enable OpenTelemetry instrumentation (optional, but recommended for better observability)
    - `export JAVA_TOOL_OPTIONS="-javaagent:./agent/opentelemetry-javaagent.jar"`
 3. Run `./gradlew bootRun` in the project directory
-4. The service will be available at `http://localhost:8080` (or your configured port)
 
 ### Run with tracing in docker containers
 
@@ -21,9 +37,12 @@ The service uses REST apis to expose data and perform operations on it.
 2. Run docker with `docker compose up --force-recreate`
 
 This will start 3 containers:
-- the application (instrumented with OpenTelemetry)
-- open telementry collector (configured to receive traces from the application and export them to Jaeger)
-- Jaeger (to visualize the traces)
+- the application (instrumented with OpenTelemetry) 8080
+- Structurizer (to visualize the architecture diagrams) 8090
+- Grafana
+  - to visualize the metrics 3000
+  - to accept the traces 4317
+  - to accept the metrics 4318
 
 ### IntelliJ setup
 
@@ -48,11 +67,11 @@ To avoid the complexity of an authenticator service this application is using pr
 you can check the `SecurityConfig` class for the user details configuration.
 At the moment we have configured only one user with no special permissions, but we can easily add more users with different roles and permissions if needed.
 
-| username | password | role              |
-|----------| --- |-------------------|
-| user     | password | unregistered user |
-| artist1  | password | registered artist |
-| artist2  | password | reigstered artist |
+| username | password | role   |
+|----------| --- |--------|
+| user     | password | USER   |
+| artist1  | password | ARTIST |
+| artist2  | password | ARTIST |
 
 
 ## Extra docs
