@@ -2,6 +2,7 @@ package com.ice.metadata
 
 import com.ice.metadata.artist.AliasAlreadyExistsException
 import com.ice.metadata.artist.NoArtistOfTheDayException
+import com.ice.metadata.track.InvalidArtistIdException
 import com.ice.metadata.utils.ConflictExceptions
 import com.ice.metadata.utils.DoesNotExistsExceptions
 import org.slf4j.Logger
@@ -64,6 +65,18 @@ class GlobalExceptionHandler {
             message = ex.message ?: "No artist alias found in the db"
         )
         return ResponseEntity(errorResponse, HttpStatus.NOT_FOUND)
+    }
+
+    @ExceptionHandler(InvalidArtistIdException::class)
+    fun handleInvalidArtistIdException(
+        ex: InvalidArtistIdException
+    ): ResponseEntity<ErrorResponse> {
+        logger.info("Invalid artist id exception: {}", ex.message, ex)
+        val errorResponse = ErrorResponse(
+            status = HttpStatus.BAD_REQUEST.value(),
+            message = ex.message ?: "The provided artist ID is invalid or does not belong to this user"
+        )
+        return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
     }
 
     @ExceptionHandler(AccessDeniedException::class, AuthorizationDeniedException::class)

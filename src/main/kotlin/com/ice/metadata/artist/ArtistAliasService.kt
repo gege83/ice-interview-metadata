@@ -18,6 +18,7 @@ interface ArtistAliasService {
         userId: String,
         updateAliasRequest: UpdateArtistAliasRequest
     ): ArtistAlias
+    fun validateArtistBelongsToUser(artistId: String, userId: String): ArtistAlias
 }
 
 @Component
@@ -66,6 +67,15 @@ class ArtistAliasServiceImpl(val artistAliasRepository: ArtistAliasRepository) :
         } catch (_: DataIntegrityViolationException) {
             throw AliasAlreadyExistsException("Alias with name ${updateAliasRequest.name} already exists!")
         }
+    }
+
+    override fun validateArtistBelongsToUser(artistId: String, userId: String): ArtistAlias {
+        val artist = artistAliasRepository.findById(artistId)
+            .orElseThrow { ArtistAliasDoesNotExistException(artistId) }
+        if (artist.userId != userId) {
+            throw ArtistAliasDoesNotExistException(artistId)
+        }
+        return artist
     }
 }
 

@@ -45,7 +45,8 @@ class HomeController(
                     artistId = alias1.id!!,
                     123,
                     genre = "Rock"
-                )
+                ),
+                userId = "artist1"
             )
         } catch (e: Exception) {
             logger.warn("Failed to create alias for artist1: ${e.message}")

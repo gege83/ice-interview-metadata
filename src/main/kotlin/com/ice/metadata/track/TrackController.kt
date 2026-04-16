@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
 import org.springframework.security.access.annotation.Secured
+import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.PutMapping
@@ -27,15 +29,20 @@ class TrackController(private val trackMetadataService: TrackMetadataService) {
 
     @PostMapping
     @Secured("ROLE_ARTIST")
-    fun createTrack(@RequestBody request: CreateTrackRequest): TrackMetadata {
-        //TODO user can make create the track with the data
-        return trackMetadataService.create(request)
+    fun createTrack(
+        @AuthenticationPrincipal userDetails: UserDetails,
+        @RequestBody request: CreateTrackRequest
+    ): TrackMetadata {
+        return trackMetadataService.create(request, userDetails.username)
     }
 
     @PutMapping("/{id}")
     @Secured("ROLE_ARTIST")
-    fun updateTrack(@PathVariable id: String, @RequestBody request: UpdateTrackRequest): TrackMetadata {
-        //TODO make sure that id can be modified by user
-        return trackMetadataService.update(id=id, updateTrack = request)
+    fun updateTrack(
+        @PathVariable id: String,
+        @AuthenticationPrincipal userDetails: UserDetails,
+        @RequestBody request: UpdateTrackRequest
+    ): TrackMetadata {
+        return trackMetadataService.update(id=id, updateTrack = request, userId = userDetails.username)
     }
 }

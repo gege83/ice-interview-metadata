@@ -74,7 +74,7 @@ At the moment we have configured only one user with no special permissions, but 
 - [x] Create diagrams to illustrate the architecture and design of the application
 - [x] Use structured logging and log correlation to improve observability
 - [x] Use OpenTelemetry to instrument the application and export traces and metrics to a monitoring system
-- [ ] Create main page to use the app.
-- [ ] Handle missing artist id in track metadata creation and update 
+- [x] Create main page to use the app.
+- [x] Handle missing artist id in track metadata creation and update 
 
 

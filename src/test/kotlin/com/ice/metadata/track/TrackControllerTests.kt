@@ -1,5 +1,8 @@
 package com.ice.metadata.track
 
+import com.ice.metadata.artist.ArtistAlias
+import com.ice.metadata.artist.ArtistAliasRepository
+import com.ice.metadata.artist.buildArtistAlias
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -29,18 +32,33 @@ class TrackControllerTests {
     private lateinit var trackMetadataRepository: TrackMetadataRepository
 
     @Autowired
+    private lateinit var artistAliasRepository: ArtistAliasRepository
+
+    @Autowired
     private lateinit var objectMapper: ObjectMapper
 
     @BeforeEach
     fun setup() {
         trackMetadataRepository.deleteAll()
+        artistAliasRepository.deleteAll()
+    }
+
+    private fun createArtistAlias(name: String, userId: String): ArtistAlias {
+        return artistAliasRepository.save(buildArtistAlias(
+            id = null,
+            name = name,
+            description = "Test Description",
+            userId = userId
+        ))
     }
 
     @Test
     fun `Get tracks for the artist when no tracks are found`() {
+        val artist = createArtistAlias("Default Artist", "artist1")
+
         mockMvc
             .perform(
-                get("/tracks?artistId=123")
+                get("/tracks?artistId=${artist.id}")
                     .with(httpBasic("user", "password"))
             )
             .andExpect(status().isOk)
@@ -62,14 +80,15 @@ class TrackControllerTests {
 
     @Test
     fun `Get tracks for the artist when there are less than a page`() {
+        val artist = createArtistAlias("Default Artist", "artist1")
+
         val trackName = "Test track"
-        val artistId = "123"
-        val track = buildTrack(name = trackName, artistId = artistId)
+        val track = buildTrack(name = trackName, artistId = artist.id!!)
         val savedTrack = trackMetadataRepository.save(track)
 
         mockMvc
             .perform(
-                get("/tracks?artistId=$artistId")
+                get("/tracks?artistId=${artist.id}")
                     .with(httpBasic("user", "password"))
             )
             .andDo(MockMvcResultHandlers.print())
@@ -125,7 +144,9 @@ class TrackControllerTests {
 
     @Test
     fun `Create a new track for an artist`() {
-        val createTrackRequest = buildCreateTrackRequest(artistId = "1233")
+        val artist = createArtistAlias("Test Artist", "artist1")
+
+        val createTrackRequest = buildCreateTrackRequest(artistId = artist.id!!)
 
         val responseString = mockMvc
             .perform(
@@ -145,8 +166,10 @@ class TrackControllerTests {
 
     @Test
     fun `Create a new track for an artist with more details`() {
+        val artist = createArtistAlias("Test Artist", "artist1")
+
         val createTrackRequest = buildCreateTrackRequest(
-            artistId = "1233",
+            artistId = artist.id!!,
             name = "Feeling good",
             length = 237,
             genre = "Jazz"
@@ -169,7 +192,9 @@ class TrackControllerTests {
 
     @Test
     fun `Update track metadata should increment version`() {
-        val track = trackMetadataRepository.save(buildTrack())
+        val artist = createArtistAlias("Test Artist", "artist1")
+
+        val track = trackMetadataRepository.save(buildTrack(artistId = artist.id!!))
         val initialVersion = track.version
         val updateTrackRequest = buildUpdateTrackRequest(artistId = track.artistId, name = "Updated Name", version = track.version)
 
@@ -188,7 +213,9 @@ class TrackControllerTests {
 
     @Test
     fun `Update track metadata with old version should fail with optimistic locking error`() {
-        val track = trackMetadataRepository.save(buildTrack())
+        val artist = createArtistAlias("Test Artist", "artist1")
+
+        val track = trackMetadataRepository.save(buildTrack(artistId = artist.id!!))
 
         // Simulating the track being updated by someone else
         trackMetadataRepository.save(track.copy(name = "Intervening update"))
@@ -209,8 +236,10 @@ class TrackControllerTests {
 
     @Test
     fun `Update fails if id not found`() {
+        val artist = createArtistAlias("Test Artist", "artist1")
+
         val trackId = "non-existent-id"
-        val updateTrackRequest = buildUpdateTrackRequest()
+        val updateTrackRequest = buildUpdateTrackRequest(artistId = artist.id!!)
 
         mockMvc
             .perform(
@@ -221,5 +250,60 @@ class TrackControllerTests {
                     .content(objectMapper.writeValueAsString(updateTrackRequest))
             )
             .andExpect(status().isNotFound) // Handled by GlobalExceptionHandler
+    }
+
+    @Test
+    fun `Create track fails if artist does not exist`() {
+        val createTrackRequest = buildCreateTrackRequest(artistId = "non-existent-artist")
+
+        mockMvc
+            .perform(
+                post("/tracks")
+                    .with(httpBasic("artist1", "password"))
+                    .with(csrf())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(createTrackRequest))
+            )
+            .andExpect(status().isBadRequest) // Handled by GlobalExceptionHandler
+    }
+
+    @Test
+    fun `Create track fails if artist belongs to different user`() {
+        // Create an artist for artist2
+        val artist2 = createArtistAlias("Artist2 Exclusive", "artist2")
+
+        val createTrackRequest = buildCreateTrackRequest(artistId = artist2.id!!)
+
+        mockMvc
+            .perform(
+                post("/tracks")
+                    .with(httpBasic("artist1", "password"))
+                    .with(csrf())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(createTrackRequest))
+            )
+            .andExpect(status().isBadRequest) // Handled by GlobalExceptionHandler
+    }
+
+    @Test
+    fun `Update track fails if artist belongs to different user`() {
+        val artist1 = createArtistAlias("Test Artist", "artist1")
+
+        val track = trackMetadataRepository.save(buildTrack(artistId = artist1.id!!))
+
+        // Create an artist for artist2
+        val artist2 = createArtistAlias("Artist2 Exclusive", "artist2")
+
+        val updateTrackRequest = buildUpdateTrackRequest(artistId = artist2.id!!, version = track.version)
+
+        mockMvc
+            .perform(
+                put("/tracks/${track.id}")
+                    .with(httpBasic("artist1", "password"))
+                    .with(csrf())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(updateTrackRequest))
+            )
+            .andExpect(status().isBadRequest) // Handled by GlobalExceptionHandler
     }
 }
