@@ -11,11 +11,13 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestMapping
 
 @RestController
+@RequestMapping("/tracks")
 class TrackController(private val trackMetadataService: TrackMetadataService) {
 
-    @GetMapping("/tracks")
+    @GetMapping
     fun getTracks(
         @RequestParam artistId: String,
         @PageableDefault(size = 10, sort = ["id"]) pageable: Pageable
@@ -23,14 +25,14 @@ class TrackController(private val trackMetadataService: TrackMetadataService) {
         return trackMetadataService.findTracksByArtistId(artistId, pageable)
     }
 
-    @PostMapping("/tracks")
+    @PostMapping
     @Secured("ROLE_ARTIST")
     fun createTrack(@RequestBody request: CreateTrackRequest): TrackMetadata {
         //TODO user can make create the track with the data
         return trackMetadataService.create(request)
     }
 
-    @PutMapping("/tracks/{id}")
+    @PutMapping("/{id}")
     @Secured("ROLE_ARTIST")
     fun updateTrack(@PathVariable id: String, @RequestBody request: UpdateTrackRequest): TrackMetadata {
         //TODO make sure that id can be modified by user

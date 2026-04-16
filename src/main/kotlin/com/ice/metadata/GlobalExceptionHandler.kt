@@ -1,6 +1,7 @@
 package com.ice.metadata
 
 import com.ice.metadata.artist.AliasAlreadyExistsException
+import com.ice.metadata.artist.NoArtistOfTheDayException
 import com.ice.metadata.utils.ConflictExceptions
 import com.ice.metadata.utils.DoesNotExistsExceptions
 import org.springframework.http.HttpStatus
@@ -41,6 +42,17 @@ class GlobalExceptionHandler {
         val errorResponse = ErrorResponse(
             status = HttpStatus.NOT_FOUND.value(),
             message = ex.message ?: "The name already exists. Please choose a different alias"
+        )
+        return ResponseEntity(errorResponse, HttpStatus.NOT_FOUND)
+    }
+
+    @ExceptionHandler(NoArtistOfTheDayException::class)
+    fun handleNoArtistOfTheDayException(
+        ex: NoArtistOfTheDayException
+    ): ResponseEntity<ErrorResponse> {
+        val errorResponse = ErrorResponse(
+            status = HttpStatus.NOT_FOUND.value(),
+            message = ex.message ?: "No artist alias found in the db"
         )
         return ResponseEntity(errorResponse, HttpStatus.NOT_FOUND)
     }

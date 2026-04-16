@@ -7,16 +7,18 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
+@RequestMapping("/artists")
 class ArtistAliasController(val artistAliasService: ArtistAliasService) {
-    @GetMapping("/artists")
+    @GetMapping
     fun getArtistsForCurrentUser(@AuthenticationPrincipal userDetails: UserDetails): ArtistAliasResponse {
         return ArtistAliasResponse(content = artistAliasService.findAllArtistAliasesFor(userDetails.username))
     }
 
-    @PostMapping("/artists")
+    @PostMapping
     fun createArtistAliasForUser(
         @AuthenticationPrincipal userDetails: UserDetails,
         @RequestBody artistAliasDetails: CreateArtistAliasRequest
@@ -24,7 +26,7 @@ class ArtistAliasController(val artistAliasService: ArtistAliasService) {
         return artistAliasService.createArtistAlias(userDetails.username, artistAliasDetails)
     }
 
-    @PutMapping("/artists/{artistId}")
+    @PutMapping("/{artistId}")
     fun createArtistAliasForUser(
         @AuthenticationPrincipal userDetails: UserDetails,
         @PathVariable artistId: String,
