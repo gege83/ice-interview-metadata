@@ -4,26 +4,24 @@ workspace "ICE Interview" "Design for ICE interview exercise" {
 
     model {
         a = person "Artist" "Music Owner"
-        p = person "Publisher" "Music Publisher manages multiple artists"
         u = person "User" "Browswes music record"
         dl = softwareSystem "Data Lake" {
             tags "External"
         }
-        ss = softwareSystem "Music metadata" {
+        ss = softwareSystem "Music metadata system" {
             wa = container "Web Application"
             db = container "Metadata storage" "postgreSQL database" {
                 tags "Database"
             }
         }
 
-        a -> ss "Manage my music metadata"
-        p -> ss "Manage my artists music metadata"
-        a -> ss.wa "Add music metadata to a catalogue"
-        p -> ss.wa "Add music metadata to an artists catalogue"
-        a -> ss.wa "Edit my musics metadata"
-        p -> ss.wa "Edit my artist's musics metadata"
-        a -> ss.wa "Fetch my musics metadata"
+        a -> ss "Manage my music metadata in"
+        a -> ss.wa "Add music metadata to a catalogue in"
+        a -> ss.wa "Edit my musics metadata in"
+        a -> ss.wa "Manage artist alias in"
+        a -> ss.wa "Fetch my musics metadata from"
         u -> ss.wa "Fetch artist of the day from"
+        u -> ss.wa "Fetch music metadata from"
         ss.wa -> ss.db "Reads from and writes to"
         ss.wa -> dl "Sends music metadata changes to" "via messaging queue"
     }

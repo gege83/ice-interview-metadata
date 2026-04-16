@@ -53,9 +53,11 @@ At the moment we have configured only one user with no special permissions, but 
 | user | password |  |
 
 
-## Architecture
+## Extra docs
 
-[see the architecture documentation](docs/architecture/architecture.md)
+- [architecture documentation](docs/architecture/architecture.md)
+- [domain](docs/domain.md)
+- [artist of the day solution](docs/artistOfTheDay.md)
 
 ## Plans:
 - [x] Create a Spring Boot application and test setup
