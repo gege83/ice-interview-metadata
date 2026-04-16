@@ -1,5 +1,6 @@
 package com.ice.metadata
 
+import com.ice.metadata.artist.AliasAlreadyExistsException
 import com.ice.metadata.track.TrackDoesNotExistException
 import com.ice.metadata.track.TrackHasBeenModifiedException
 import org.springframework.http.HttpStatus
@@ -18,6 +19,17 @@ class GlobalExceptionHandler {
             status = HttpStatus.CONFLICT.value(),
             message = ex.message
                 ?: "The record you attempted to edit was modified by another user. Please reload the data and try again."
+        )
+        return ResponseEntity(errorResponse, HttpStatus.CONFLICT)
+    }
+
+    @ExceptionHandler(AliasAlreadyExistsException::class)
+    fun handleAliasAlreadyExistsException(
+        ex: AliasAlreadyExistsException
+    ): ResponseEntity<ErrorResponse> {
+        val errorResponse = ErrorResponse(
+            status = HttpStatus.CONFLICT.value(),
+            message = ex.message ?: "The name already exists. Please choose a different alias"
         )
         return ResponseEntity(errorResponse, HttpStatus.CONFLICT)
     }
