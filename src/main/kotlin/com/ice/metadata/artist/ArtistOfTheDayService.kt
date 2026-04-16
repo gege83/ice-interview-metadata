@@ -1,5 +1,7 @@
 package com.ice.metadata.artist
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
@@ -12,6 +14,7 @@ interface ArtistOfTheDayService {
 
 @Component
 class ArtistOfTheDayServiceGlobalRotation(val artistRepository: ArtistAliasRepository) : ArtistOfTheDayService {
+val logger: Logger = LoggerFactory.getLogger(ArtistOfTheDayService::class.java)
 
     override fun findArtistOfTheDay(date: LocalDate): ArtistAlias {
         var artistOfTheDay = findTodayArtistOfTheDay(date)
@@ -29,8 +32,13 @@ class ArtistOfTheDayServiceGlobalRotation(val artistRepository: ArtistAliasRepos
         return updateArtistOfTheDayIfNeeded(artistOfTheDay, date)
     }
 
-    private fun findTodayArtistOfTheDay(date: LocalDate): ArtistAlias? =
-        artistRepository.findByArtistOfTheDayDate(date)
+    private fun findTodayArtistOfTheDay(date: LocalDate): ArtistAlias? {
+        logger.debug("Fetching today's artist of the day for date: {}", date)
+        val artistOfTheDay = artistRepository.findByArtistOfTheDayDate(date)
+        logger.info("Fetched today's artist of the day for date: {}, name: {}", date, artistOfTheDay?.name)
+        return artistOfTheDay
+    }
+
 
     private fun updateArtistOfTheDayIfNeeded(
         artistOfTheDay: ArtistAlias,
@@ -39,11 +47,16 @@ class ArtistOfTheDayServiceGlobalRotation(val artistRepository: ArtistAliasRepos
         return if (isUpdateNeeded(artistOfTheDay, date)) {
             val updatedArtist = artistOfTheDay.copy(artistOfTheDayDate = date)
             try {
-                artistRepository.save(updatedArtist)
+                logger.debug("Updating artist of the day. Artist: {}, date: {}", updatedArtist.name, date)
+                val updated = artistRepository.save(updatedArtist)
+                logger.debug("Updated artist of the day. Artist: {}, date: {}", updated.name, date)
+                updated
             } catch (_: DataIntegrityViolationException) {
+                logger.info("Save failed, probably concurrent update. Retrying today's artist of the day")
                 return findTodayArtistOfTheDay(date) ?: throw NoArtistOfTheDayException()
             }
         } else {
+            logger.debug("no update needed")
             artistOfTheDay
         }
     }
@@ -51,8 +64,9 @@ class ArtistOfTheDayServiceGlobalRotation(val artistRepository: ArtistAliasRepos
     private fun isUpdateNeeded(artistOfTheDay: ArtistAlias, date: LocalDate): Boolean =
         artistOfTheDay.artistOfTheDayDate == null || artistOfTheDay.artistOfTheDayDate.isBefore(date)
 
-    private fun findOldestArtistOfTheDay(): ArtistAlias? =
-        artistRepository
+    private fun findOldestArtistOfTheDay(): ArtistAlias? {
+        logger.debug("Fetching oldest artist of the day")
+        val artistOfTheDay = artistRepository
             .findAll(
                 PageRequest.of(
                     0,
@@ -61,11 +75,18 @@ class ArtistOfTheDayServiceGlobalRotation(val artistRepository: ArtistAliasRepos
                 )
             )
             .content.firstOrNull()
+        logger.info("Fetched oldest artist of the day: {}", artistOfTheDay?.name)
+        return artistOfTheDay
+    }
 
-    private fun findArtistWhoHaveNotBeenBefore(): ArtistAlias? =
-        artistRepository
+    private fun findArtistWhoHaveNotBeenBefore(): ArtistAlias? {
+        logger.debug("Fetching artist who have not been artist of the day before")
+        val artistAlias = artistRepository
             .findAllByArtistOfTheDayDateIsNull(
                 PageRequest.of(0, 1)
             )
             .content.firstOrNull()
+        logger.info("Fetched artist who have been artist of the day before. Artist of the day: {}", artistAlias?.name)
+        return artistAlias
+    }
 }

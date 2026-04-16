@@ -22,9 +22,9 @@ management:
 logging:
   level:
     root: INFO
-    io.opentelemetry: DEBUG
-    io.opentelemetry.exporter: DEBUG
-    io.micrometer.tracing: DEBUG
+#    io.opentelemetry: DEBUG
+#    io.opentelemetry.exporter: DEBUG
+#    io.micrometer.tracing: DEBUG
 
 otel:
   exporter:
