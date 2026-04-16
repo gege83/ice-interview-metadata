@@ -32,6 +32,7 @@ dependencies {
 	implementation("tools.jackson.module:jackson-module-kotlin")
 	implementation("net.logstash.logback:logstash-logback-encoder:7.4")
 	implementation("io.micrometer:micrometer-tracing-bridge-brave")
+	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-actuator-test")

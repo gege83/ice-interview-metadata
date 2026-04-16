@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+<body>
+<h1>Track metadata application demo</h1>
+
+<p>
+    This page is just for demonstration. There are 3 users that has been created for testing purposes: artist1, artist2 and user
+    artist1 and artist2 are with role ARTIST, they can create aliases and manage their tracks.
+    While user has USER role, allows it to list artists and tracks but not allowed to create or modify one.
+</p>
+<p>
+    The database is an H2 inmemory database, so every restart will reset the data.
+    To quickly generate some data please click on `Generate base data` button.
+</p>
+<p>
+    To create a new artist alias you can use the POST /artists endpoint.
+    To update an existing one you need to use the PUT /artists/{id}.
+    To list all aliases for a user use the GET /artists endpoint.
+</p>
+<p>
+    To create a new track metadata you can use the POST /track endpoint.
+    To update an existing one you need to use the PUT /track/{id}.
+    To list all aliases for a user use the GET /tracks?artistId={artistId} endpoint.
+</p>
+<p>
+    Artist of the day endpoint is GET /public/artist-of-the-day.
+    The endpoint will return the same artist alias for a day for all users.
+</p>
+
+<form action="/" method="post">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <button type="submit">Generate base data</button>
+</form>
+<button id="artistOfTheDayButton">Show Artist of the Day</button>
+<div id="artistOfTheDay"></div>
+
+<div id="loginSection">
+    <h2>Login</h2>
+    <form id="loginForm">
+        <label for="loginUsername">Username:</label>
+        <select id="loginUsername" name="username" required>
+            <option value="artist1">artist1</option>
+            <option value="artist2">artist2</option>
+            <option value="user">user</option>
+        </select><br><br>
+        <label for="loginPassword">Password:</label>
+        <input type="password" id="loginPassword" name="password" value="password" required><br><br>
+        <button type="submit">Login</button>
+    </form>
+</div>
+
+<div id="mainSection" style="display: none;">
+    <div id="userInfo"></div>
+    <button id="logoutButton">Logout</button>
+    <h2>Add New Artist Alias</h2>
+    <form id="artistAliasForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+        <label for="description">Description:</label>
+        <input type="text" id="description" name="description" required><br><br>
+        <button type="submit">Add Artist Alias</button>
+    </form>
+
+    <h2>Your Artist Aliases</h2>
+    <div id="aliasesList"></div>
+    <div id="tracksDisplay"></div>
+
+    <div id="editTrackSection" style="display: none;">
+        <h3>Edit Track</h3>
+        <form id="editTrackForm">
+            <input type="hidden" id="editTrackId">
+            <input type="hidden" id="editTrackVersion">
+            <label for="editTrackArtistSelect">Artist Alias:</label>
+            <select id="editTrackArtistSelect" name="editTrackArtistSelect" required>
+                <option value="">-- Select Alias --</option>
+            </select><br><br>
+            <label for="editTrackName">Track Name:</label>
+            <input type="text" id="editTrackName" required><br><br>
+            <label for="editTrackLength">Length (seconds):</label>
+            <input type="number" id="editTrackLength" required><br><br>
+            <label for="editTrackGenre">Genre:</label>
+            <input type="text" id="editTrackGenre"><br><br>
+            <button type="submit">Update Track</button>
+            <button type="button" id="cancelEdit">Cancel</button>
+        </form>
+    </div>
+
+    <h2>Add New Track</h2>
+    <form id="trackForm">
+        <label for="aliasSelect">Select Artist Alias:</label>
+        <select id="aliasSelect" name="aliasSelect" required>
+            <option value="">-- Select Alias --</option>
+        </select><br><br>
+        <label for="trackName">Track Name:</label>
+        <input type="text" id="trackName" name="trackName" required><br><br>
+        <label for="trackLength">Length (seconds):</label>
+        <input type="number" id="trackLength" name="trackLength" required><br><br>
+        <label for="trackGenre">Genre:</label>
+        <input type="text" id="trackGenre" name="trackGenre"><br><br>
+        <button type="submit">Add Track</button>
+    </form>
+</div>
+
+<script>
+let currentAliasId = null;
+let currentAliasName = null;
+
+function getCredentials() {
+    return {
+        username: sessionStorage.getItem('username'),
+        password: sessionStorage.getItem('password')
+    };
+}
+
+function setCredentials(username, password) {
+    sessionStorage.setItem('username', username);
+    sessionStorage.setItem('password', password);
+}
+
+function clearCredentials() {
+    sessionStorage.removeItem('username');
+    sessionStorage.removeItem('password');
+}
+
+function fetchAliases() {
+    const { username, password } = getCredentials();
+    if (!username || !password) return;
+    const credentials = btoa(username + ':' + password);
+    fetch('/artists', {
+        method: 'GET',
+        headers: {
+            'Authorization': 'Basic ' + credentials
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const aliases = data.content;
+        const list = document.getElementById('aliasesList');
+        const select = document.getElementById('aliasSelect');
+        const editSelect = document.getElementById('editTrackArtistSelect');
+        list.innerHTML = '';
+        select.innerHTML = '<option value="">-- Select Alias --</option>';
+        editSelect.innerHTML = '<option value="">-- Select Alias --</option>';
+        if (aliases.length === 0) {
+            list.innerHTML = '<p>No artist aliases found.</p>';
+        } else {
+            const ul = document.createElement('ul');
+            aliases.forEach(alias => {
+                const li = document.createElement('li');
+                li.textContent = `${alias.name}: ${alias.description} - ${alias.artistOfTheDayDate}`;
+
+                const showTracksBtn = document.createElement('button');
+                showTracksBtn.textContent = 'Show Tracks';
+                showTracksBtn.addEventListener('click', () => showTracksForAlias(alias.id, alias.name));
+                li.appendChild(showTracksBtn);
+
+                ul.appendChild(li);
+
+                const option = document.createElement('option');
+                option.value = alias.id;
+                option.textContent = alias.name;
+                select.appendChild(option);
+
+                const editOption = document.createElement('option');
+                editOption.value = alias.id;
+                editOption.textContent = alias.name;
+                editSelect.appendChild(editOption);
+            });
+            list.appendChild(ul);
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching aliases:', error);
+    });
+}
+
+function showTracksForAlias(aliasId, aliasName) {
+    currentAliasId = aliasId;
+    currentAliasName = aliasName;
+    const { username, password } = getCredentials();
+    if (!username || !password) return;
+    const credentials = btoa(username + ':' + password);
+    fetch('/tracks?artistId=' + aliasId, {
+        method: 'GET',
+        headers: {
+            'Authorization': 'Basic ' + credentials
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const tracks = data.content;
+        const display = document.getElementById('tracksDisplay');
+        display.innerHTML = `<h3>Tracks for ${aliasName}</h3>`;
+        if (tracks.length === 0) {
+            display.innerHTML += '<p>No tracks found for this alias.</p>';
+        } else {
+            const ul = document.createElement('ul');
+            tracks.forEach(track => {
+                const li = document.createElement('li');
+                li.textContent = `${track.name} (${track.length} seconds) - Genre: ${track.genre || 'N/A'}`;
+
+                const editBtn = document.createElement('button');
+                editBtn.textContent = 'Edit';
+                editBtn.addEventListener('click', () => openEditTrackForm(track));
+                li.appendChild(editBtn);
+
+                ul.appendChild(li);
+            });
+            display.appendChild(ul);
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching tracks:', error);
+    });
+}
+
+function openEditTrackForm(track) {
+    document.getElementById('editTrackId').value = track.id;
+    document.getElementById('editTrackVersion').value = track.version;
+    document.getElementById('editTrackName').value = track.name;
+    document.getElementById('editTrackLength').value = track.length;
+    document.getElementById('editTrackGenre').value = track.genre || '';
+    document.getElementById('editTrackArtistSelect').value = track.artistId;
+    document.getElementById('editTrackSection').style.display = 'block';
+    document.getElementById('tracksDisplay').style.display = 'none';
+}
+
+function closeEditTrackForm() {
+    document.getElementById('editTrackSection').style.display = 'none';
+    document.getElementById('tracksDisplay').style.display = 'block';
+}
+
+function showMain() {
+    const { username } = getCredentials();
+    document.getElementById('userInfo').textContent = 'Logged in as: ' + username;
+    document.getElementById('loginSection').style.display = 'none';
+    document.getElementById('mainSection').style.display = 'block';
+    fetchAliases();
+}
+
+function showLogin() {
+    document.getElementById('loginSection').style.display = 'block';
+    document.getElementById('mainSection').style.display = 'none';
+}
+
+// On page load
+window.addEventListener('load', function() {
+    const { username, password } = getCredentials();
+    if (username && password) {
+        showMain();
+    } else {
+        showLogin();
+    }
+});
+
+document.getElementById('loginForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const username = document.getElementById('loginUsername').value;
+    const password = document.getElementById('loginPassword').value;
+
+    const credentials = btoa(username + ':' + password);
+    fetch('/artists', {
+        method: 'GET',
+        headers: {
+            'Authorization': 'Basic ' + credentials
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            setCredentials(username, password);
+            showMain();
+        } else {
+            alert('Login failed: ' + response.statusText);
+        }
+    })
+    .catch(error => {
+        alert('Login error: ' + error.message);
+    });
+});
+
+document.getElementById('artistAliasForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const { username, password } = getCredentials();
+    const name = document.getElementById('name').value;
+    const description = document.getElementById('description').value;
+
+    const credentials = btoa(username + ':' + password);
+    const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+    fetch('/artists', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Basic ' + credentials,
+            [header]: token
+        },
+        body: JSON.stringify({ name: name, description: description })
+    })
+    .then(response => {
+        if (response.ok) {
+            document.getElementById('artistAliasForm').reset();
+            fetchAliases();
+        } else {
+            alert('Error adding artist alias: ' + response.statusText);
+        }
+    })
+    .catch(error => {
+        alert('Error: ' + error.message);
+    });
+});
+
+document.getElementById('trackForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const { username, password } = getCredentials();
+    const alias = document.getElementById('aliasSelect').value;
+    const trackName = document.getElementById('trackName').value;
+    const trackLength = document.getElementById('trackLength').value;
+    const trackGenre = document.getElementById('trackGenre').value;
+
+    const credentials = btoa(username + ':' + password);
+    const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+    fetch('/tracks', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Basic ' + credentials,
+            [header]: token
+        },
+        body: JSON.stringify({
+            name: trackName,
+            artistId: alias,
+            length: parseInt(trackLength),
+            genre: trackGenre || null
+        })
+    })
+    .then(response => {
+        if (response.ok) {
+            document.getElementById('trackForm').reset();
+            if (alias === currentAliasId) {
+                showTracksForAlias(currentAliasId, currentAliasName);
+            }
+        } else {
+            alert('Error adding track: ' + response.statusText);
+        }
+    })
+    .catch(error => {
+        alert('Error: ' + error.message);
+    });
+});
+
+document.getElementById('logoutButton').addEventListener('click', function() {
+    clearCredentials();
+    showLogin();
+});
+
+document.getElementById('artistOfTheDayButton').addEventListener('click', function() {
+    fetch('/public/artist-of-the-day')
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('artistOfTheDay').innerHTML = `<p>Artist of the Day: ${data.name} - ${data.description} - ${data.artistOfTheDayDate}</p>`;
+    })
+    .catch(error => {
+        console.error('Error fetching artist of the day:', error);
+        document.getElementById('artistOfTheDay').innerHTML = '<p>Unable to fetch artist of the day.</p>';
+    });
+});
+
+document.getElementById('editTrackForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const { username, password } = getCredentials();
+    const trackId = document.getElementById('editTrackId').value;
+    const trackName = document.getElementById('editTrackName').value;
+    const trackLength = document.getElementById('editTrackLength').value;
+    const trackGenre = document.getElementById('editTrackGenre').value;
+
+    const credentials = btoa(username + ':' + password);
+    const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+    fetch('/tracks/' + trackId, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Basic ' + credentials,
+            [header]: token
+        },
+        body: JSON.stringify({
+            version: parseInt(document.getElementById('editTrackVersion').value),
+            artistId: document.getElementById('editTrackArtistSelect').value,
+            name: trackName,
+            length: parseInt(trackLength),
+            genre: trackGenre || null
+        })
+    })
+    .then(response => {
+        if (response.ok) {
+            document.getElementById('editTrackForm').reset();
+            closeEditTrackForm();
+            showTracksForAlias(currentAliasId, currentAliasName);
+        } else {
+            alert('Error updating track: ' + response.statusText);
+        }
+    })
+    .catch(error => {
+        alert('Error: ' + error.message);
+    });
+});
+
+document.getElementById('cancelEdit').addEventListener('click', function() {
+    closeEditTrackForm();
+});
+</script>
+
+</body>
+</html>

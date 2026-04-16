@@ -8,6 +8,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetailsService
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.provisioning.InMemoryUserDetailsManager
 import org.springframework.security.web.SecurityFilterChain
 
@@ -17,11 +19,15 @@ import org.springframework.security.web.SecurityFilterChain
 class SecurityConfig {
 
     @Bean
+    fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
+
+    @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .authorizeHttpRequests { authz ->
                 authz
                     .requestMatchers(
+                        "/", // home
                         "/public/**",
                         "/actuator/**",
                     ).permitAll()
@@ -35,20 +41,18 @@ class SecurityConfig {
     // creating test user
     @Bean
     fun userDetailsService(): UserDetailsService {
-        val user = User.withDefaultPasswordEncoder()
-            .username("user")
-            .password("password")
+        val encoder = passwordEncoder()
+        val user = User.withUsername("user")
+            .password(encoder.encode("password"))
             .roles("USER")
             .build()
 
-        val artist1 = User.withDefaultPasswordEncoder()
-            .username("artist1")
-            .password("password")
+        val artist1 = User.withUsername("artist1")
+            .password(encoder.encode("password"))
             .roles("ARTIST")
             .build()
-        val artist2 = User.withDefaultPasswordEncoder()
-            .username("artist2")
-            .password("password")
+        val artist2 = User.withUsername("artist2")
+            .password(encoder.encode("password"))
             .roles("ARTIST")
             .build()
 

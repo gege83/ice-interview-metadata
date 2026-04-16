@@ -25,3 +25,6 @@ jobs:
 
       - name: Run tests
         run: ./gradlew test
+
+#  TODO: deployment is missing as we are not deploying to any environment yet,
+#  but we can add it later when we have a staging or production environment to deploy to.
