@@ -63,54 +63,84 @@ class TrackMetadataServiceTests {
     inner class CreateNewTracksForArtistTests {
         @Test
         fun `Should create new track when there is no track`() {
-            val artistId = "2345"
-            val track = buildTrack(artistId = artistId, id = null)
+            val createTrackRequest = buildCreateTrackRequest(
+                artistId = "2345",
+                name = "Test track",
+                length = 123L,
+                genre = "Pop"
+            )
             val generatedId = "generatedId"
-            whenever(trackMetadataRepository.save(track))
-                .thenReturn(track.copy(id = generatedId))
-            val savedTrack: TrackMetadata = service.create(track)
-            assertEquals("generatedId", savedTrack.id)
-            assertEquals(artistId, savedTrack.artistId)
-        }
-
-        @Test
-        fun `Should throw exception when id is not null when creating a new track`() {
-            val artistId = "2345"
-            val track = buildTrack(artistId = artistId, id = "alreadyExistingId")
-
-            assertThrows<TrackIdAlreadyExistsException> {
-                service.create(track)
-            }
+            val expectedTrackToSave = buildTrack(
+                id = null,
+                artistId = createTrackRequest.artistId,
+                name = createTrackRequest.name,
+                length = createTrackRequest.length,
+                genre = createTrackRequest.genre
+            )
+            whenever(trackMetadataRepository.save(any()))
+                .thenReturn(
+                    expectedTrackToSave.copy(id = generatedId)
+                )
+            val savedTrack: TrackMetadata = service.create(createTrackRequest)
+            assertEquals(expectedTrackToSave.copy(id = generatedId), savedTrack)
+            verify(trackMetadataRepository).save(expectedTrackToSave)
         }
     }
 
     @Nested
     inner class UpdateExistingTrackForArtistTests {
         @Test
-        fun `Should update existing track`() {
-            val artistId = "2345"
+        fun `Should update existing track with all fields`() {
             val trackId = "track id"
-            val originalTrack = buildTrack(artistId = artistId, name = "some name", id = trackId)
-            val newName = "new Name"
-            val updateTrack = buildTrack(artistId = artistId, name = newName, id = trackId)
+            val originalTrack = buildTrack(id = trackId)
+            val updateTrack = buildUpdateTrackRequest(
+                name = "new Name",
+                genre = "Pop",
+                length = 123L,
+                artistId = "new artist id",
+                version = 0
+            )
+            val expectedUpdateTrack = buildTrack(
+                id = trackId,
+                name = updateTrack.name!!,
+                genre = updateTrack.genre!!,
+                length = updateTrack.length!!,
+                artistId = updateTrack.artistId!!,
+                version = updateTrack.version
+            )
 
             whenever(trackMetadataRepository.findById(trackId)).thenReturn(Optional.of(originalTrack))
-            whenever(trackMetadataRepository.save(updateTrack))
-                .thenReturn(updateTrack)
-            val savedTrack: TrackMetadata = service.update(updateTrack)
-            assertEquals(newName, savedTrack.name)
+            whenever(trackMetadataRepository.save(any()))
+                .thenReturn(expectedUpdateTrack)
+            val savedTrack: TrackMetadata = service.update(trackId, updateTrack)
+            assertEquals(expectedUpdateTrack, savedTrack)
+            verify(trackMetadataRepository).save(expectedUpdateTrack)
+        }
+
+        @Test
+        fun `Should update existing track with non-null fields`() {
+            val trackId = "track id"
+            val originalTrack = buildTrack(length = 123, id = trackId)
+            val newLength = 1234L
+            val updateTrack = buildUpdateTrackRequest(length = newLength, version = 0)
+            val expectedUpdateTrack = buildTrack(id = trackId, length = newLength, version = 0)
+
+            whenever(trackMetadataRepository.findById(trackId)).thenReturn(Optional.of(originalTrack))
+            whenever(trackMetadataRepository.save(any()))
+                .thenReturn(expectedUpdateTrack)
+            val savedTrack: TrackMetadata = service.update(trackId, updateTrack)
+            assertEquals(expectedUpdateTrack, savedTrack)
+            verify(trackMetadataRepository).save(expectedUpdateTrack)
         }
 
         @Test
         fun `Should throw not existing exception if track doesn't exist`() {
-            val artistId = "2345"
             val trackId = "track id"
-            val newName = "new Name"
-            val updateTrack = buildTrack(artistId = artistId, name = newName, id = trackId)
+            val updateTrack = buildUpdateTrackRequest()
 
             whenever(trackMetadataRepository.findById(trackId)).thenReturn(Optional.empty())
             assertThrows<TrackDoesNotExistException> {
-                service.update(updateTrack)
+                service.update(trackId, updateTrack)
             }
         }
     }

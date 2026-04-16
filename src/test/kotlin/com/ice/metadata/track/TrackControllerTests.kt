@@ -1,5 +1,6 @@
 package com.ice.metadata.track
 
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -30,10 +31,13 @@ class TrackControllerTests {
     @Autowired
     private lateinit var objectMapper: ObjectMapper
 
+    @BeforeEach
+    fun setup() {
+        trackMetadataRepository.deleteAll()
+    }
+
     @Test
     fun `Get tracks for the artist when no tracks are found`() {
-        trackMetadataRepository.deleteAll()
-
         mockMvc
             .perform(
                 get("/tracks?artistId=123")
@@ -49,7 +53,6 @@ class TrackControllerTests {
         val trackName = "Test track"
         val artistId = "123"
         val track = buildTrack(name = trackName, artistId = artistId)
-        trackMetadataRepository.deleteAll()
         val savedTrack = trackMetadataRepository.save(track)
 
         mockMvc
@@ -67,7 +70,6 @@ class TrackControllerTests {
 
     @Test
     fun `Get tracks for the artist when there are more than a page and return page size only`() {
-        trackMetadataRepository.deleteAll()
         val artistId = 123
         trackMetadataRepository.saveAll(
             listOf(
@@ -96,7 +98,6 @@ class TrackControllerTests {
         val track1 = buildTrack(artistId = artistId)
         val track2 = buildTrack(artistId = "13")
         val track3 = buildTrack(artistId = "456")
-        trackMetadataRepository.deleteAll()
         trackMetadataRepository.saveAll(listOf(track1, track2, track3))
 
         mockMvc
@@ -112,7 +113,6 @@ class TrackControllerTests {
 
     @Test
     fun `Create a new track for an artist`() {
-        trackMetadataRepository.deleteAll()
         val createTrackRequest = buildCreateTrackRequest(artistId = "1233")
 
         val responseString = mockMvc
@@ -169,5 +169,29 @@ class TrackControllerTests {
                     .content(objectMapper.writeValueAsString(updateTrackRequest))
             )
             .andExpect(status().isConflict) // Handled by GlobalExceptionHandler
+    }
+
+    @Test
+    fun `Create a new track for an artist with more details`() {
+        val createTrackRequest = buildCreateTrackRequest(
+            artistId = "1233",
+            name = "Feeling good",
+            length = 237,
+            genre = "Jazz"
+        )
+
+        mockMvc
+            .perform(
+                post("/tracks")
+                    .with(httpBasic("user", "password"))
+                    .with(csrf())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(createTrackRequest))
+            )
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.id").isNotEmpty)
+            .andExpect(jsonPath("$.name").value("Feeling good"))
+            .andExpect(jsonPath("$.length").value(237))
+            .andExpect(jsonPath("$.genre").value("Jazz"))
     }
 }

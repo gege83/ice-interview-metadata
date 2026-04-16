@@ -24,25 +24,13 @@ class TrackController(private val trackMetadataService: TrackMetadataService) {
 
     @PostMapping("/tracks")
     fun createTrack(@RequestBody request: CreateTrackRequest): TrackMetadata {
-        val trackMetadata = TrackMetadata(
-            id = null,
-            name = request.name,
-            artistId = request.artistId
-        )
-        return trackMetadataService.create(trackMetadata)
+        //TODO user can make create the track with the data
+        return trackMetadataService.create(request)
     }
 
     @PutMapping("/tracks/{id}")
     fun updateTrack(@PathVariable id: String, @RequestBody request: UpdateTrackRequest): TrackMetadata {
-        val trackMetadata = TrackMetadata(
-            id = id,
-            name = request.name,
-            artistId = request.artistId,
-            version = request.version
-        )
-        return trackMetadataService.update(trackMetadata)
+        //TODO make sure that id can be modified by user
+        return trackMetadataService.update(id=id, updateTrack = request)
     }
 }
-
-data class CreateTrackRequest(val name: String, val artistId: String)
-data class UpdateTrackRequest(val name: String, val artistId: String, val version: Long)
