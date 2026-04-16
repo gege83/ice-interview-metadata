@@ -61,13 +61,15 @@ At the moment we have configured only one user with no special permissions, but 
 
 ## Plans:
 - [x] Create a Spring Boot application and test setup
-- [ ] Create a REST controller to handle song metadata
-- [ ] Use schema versioning to manage data structure changes over time
+- [x] Create REST endpoints to handle song metadata
+- [ ] Create REST endpoints to handle artist alias
+- [ ] Create REST endpoint to handle artist of the day
+- [x] Use schema versioning to manage data structure changes over time
 - [x] Configure security to protect the endpoints
-- [ ] Create CI/CD pipeline to build and test the application
+- [x] Create CI/CD pipeline to build and test the application
 - [x] Create a Dockerfile to containerize the application (build image does this for us)
 - [ ] Docker compose file to run the application and it's dependencies locally
-- [ ] Create diagrams to illustrate the architecture and design of the application
+- [x] Create diagrams to illustrate the architecture and design of the application
 - [ ] Use structured logging and log correlation to improve observability
 - [x] Use OpenTelemetry to instrument the application and export traces and metrics to a monitoring system
 
