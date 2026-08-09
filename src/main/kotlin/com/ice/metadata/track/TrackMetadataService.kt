@@ -75,6 +75,7 @@ class TrackMetadataServiceImpl(
         // If artistId is being updated, validate it belongs to the user
         val newArtistId = updateTrack.artistId ?: existingTrack.artistId
         validateArtistIdBelongsToUser(newArtistId, userId)
+        validateArtistIdBelongsToUser(existingTrack.artistId, userId)
 
         val trackToSave = existingTrack.copy(
             name = updateTrack.name ?: existingTrack.name,
