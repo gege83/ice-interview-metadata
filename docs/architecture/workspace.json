@@ -3,7 +3,9 @@
   "description" : "Design for ICE interview exercise",
   "documentation" : { },
   "id" : 1,
-  "lastModifiedDate" : "2026-04-16T20:37:54Z",
+  "lastModifiedAgent" : "structurizr/diagrams/fb21db4d-28a2-4f14-88a5-ca63319f1003",
+  "lastModifiedDate" : "2026-08-09T13:40:34Z",
+  "lastModifiedUser" : "587437287",
   "model" : {
     "people" : [ {
       "description" : "Music Owner",
@@ -15,31 +17,49 @@
       "relationships" : [ {
         "description" : "Manage my music metadata in",
         "destinationId" : "4",
-        "id" : "7",
+        "id" : "36",
+        "sourceId" : "1",
+        "tags" : "Relationship"
+      }, {
+        "description" : "Add music metadata to a catalogue in",
+        "destinationId" : "10",
+        "id" : "37",
         "sourceId" : "1",
         "tags" : "Relationship"
       }, {
         "description" : "Add music metadata to a catalogue in",
         "destinationId" : "5",
-        "id" : "8",
-        "sourceId" : "1",
-        "tags" : "Relationship"
+        "id" : "38",
+        "linkedRelationshipId" : "37",
+        "sourceId" : "1"
       }, {
         "description" : "Edit my musics metadata in",
-        "destinationId" : "5",
-        "id" : "9",
+        "destinationId" : "12",
+        "id" : "39",
         "sourceId" : "1",
         "tags" : "Relationship"
       }, {
         "description" : "Manage artist alias in",
-        "destinationId" : "5",
-        "id" : "10",
+        "destinationId" : "12",
+        "id" : "40",
         "sourceId" : "1",
         "tags" : "Relationship"
       }, {
         "description" : "Fetch my musics metadata from",
-        "destinationId" : "5",
-        "id" : "11",
+        "destinationId" : "10",
+        "id" : "41",
+        "sourceId" : "1",
+        "tags" : "Relationship"
+      }, {
+        "description" : "Login to manage my music metadata in",
+        "destinationId" : "7",
+        "id" : "48",
+        "sourceId" : "1",
+        "tags" : "Relationship"
+      }, {
+        "description" : "Manage my music metadata in",
+        "destinationId" : "6",
+        "id" : "49",
         "sourceId" : "1",
         "tags" : "Relationship"
       } ],
@@ -53,20 +73,32 @@
       },
       "relationships" : [ {
         "description" : "Fetch artist of the day from",
-        "destinationId" : "5",
-        "id" : "12",
+        "destinationId" : "14",
+        "id" : "42",
         "sourceId" : "2",
         "tags" : "Relationship"
       }, {
         "description" : "Fetch artist of the day from",
+        "destinationId" : "5",
+        "id" : "43",
+        "linkedRelationshipId" : "42",
+        "sourceId" : "2"
+      }, {
+        "description" : "Fetch artist of the day from",
         "destinationId" : "4",
-        "id" : "13",
-        "linkedRelationshipId" : "12",
+        "id" : "44",
+        "linkedRelationshipId" : "42",
         "sourceId" : "2"
       }, {
         "description" : "Fetch music metadata from",
-        "destinationId" : "5",
-        "id" : "14",
+        "destinationId" : "10",
+        "id" : "45",
+        "sourceId" : "2",
+        "tags" : "Relationship"
+      }, {
+        "description" : "Browse my music metadata in",
+        "destinationId" : "6",
+        "id" : "50",
         "sourceId" : "2",
         "tags" : "Relationship"
       } ],
@@ -82,6 +114,238 @@
       "tags" : "Element,Software System,External"
     }, {
       "containers" : [ {
+        "components" : [ {
+          "description" : "Demonstrates system capabilities",
+          "documentation" : { },
+          "group" : "demo",
+          "id" : "6",
+          "name" : "Single Page Application",
+          "properties" : {
+            "structurizr.dsl.identifier" : "ss.wa.spa"
+          },
+          "relationships" : [ {
+            "description" : "Fetches track metadata from",
+            "destinationId" : "10",
+            "id" : "25",
+            "sourceId" : "6",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Fetches artist metadata from",
+            "destinationId" : "12",
+            "id" : "26",
+            "sourceId" : "6",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Seeds the database with initial data",
+            "destinationId" : "9",
+            "id" : "28",
+            "sourceId" : "6",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Fetches artist of the day from",
+            "destinationId" : "14",
+            "id" : "29",
+            "sourceId" : "6",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component,Demo",
+          "technology" : "Vanila JS and HTML"
+        }, {
+          "description" : "Handles user login and authentication",
+          "documentation" : { },
+          "group" : "demo",
+          "id" : "7",
+          "name" : "Login",
+          "properties" : {
+            "structurizr.dsl.identifier" : "ss.wa.login"
+          },
+          "relationships" : [ {
+            "description" : "Authenticates user",
+            "destinationId" : "8",
+            "id" : "27",
+            "sourceId" : "7",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component,Demo",
+          "technology" : "Vanila JS and HTML"
+        }, {
+          "description" : "Handles user authentication",
+          "documentation" : { },
+          "group" : "demo",
+          "id" : "8",
+          "name" : "Authentication",
+          "properties" : {
+            "structurizr.dsl.identifier" : "ss.wa.authentication"
+          },
+          "tags" : "Element,Component,Demo",
+          "technology" : "Spring Security"
+        }, {
+          "description" : "Seeds the database with initial data",
+          "documentation" : { },
+          "group" : "demo",
+          "id" : "9",
+          "name" : "Seed",
+          "properties" : {
+            "structurizr.dsl.identifier" : "ss.wa.seed"
+          },
+          "relationships" : [ {
+            "description" : "Seeds track metadata to",
+            "destinationId" : "16",
+            "id" : "30",
+            "sourceId" : "9",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Seeds artist metadata to",
+            "destinationId" : "17",
+            "id" : "31",
+            "sourceId" : "9",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component,Demo",
+          "technology" : "Java"
+        }, {
+          "description" : "Manages track metadata",
+          "documentation" : { },
+          "id" : "10",
+          "name" : "Track API",
+          "properties" : {
+            "structurizr.dsl.identifier" : "ss.wa.t"
+          },
+          "relationships" : [ {
+            "description" : "Manages track metadata changes",
+            "destinationId" : "11",
+            "id" : "18",
+            "sourceId" : "10",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component,Service",
+          "technology" : "Java"
+        }, {
+          "description" : "Manages track metadata",
+          "documentation" : { },
+          "id" : "11",
+          "name" : "Track Service",
+          "properties" : {
+            "structurizr.dsl.identifier" : "ss.wa.ts"
+          },
+          "relationships" : [ {
+            "description" : "Reads from and writes to",
+            "destinationId" : "16",
+            "id" : "19",
+            "sourceId" : "11",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component,Service",
+          "technology" : "Java"
+        }, {
+          "description" : "Manages artists",
+          "documentation" : { },
+          "id" : "12",
+          "name" : "Artist alias API",
+          "properties" : {
+            "structurizr.dsl.identifier" : "ss.wa.a"
+          },
+          "relationships" : [ {
+            "description" : "manages artist alias changes",
+            "destinationId" : "13",
+            "id" : "20",
+            "sourceId" : "12",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component,Service",
+          "technology" : "Java"
+        }, {
+          "description" : "Handles artist alias changes",
+          "documentation" : { },
+          "id" : "13",
+          "name" : "Artist service",
+          "properties" : {
+            "structurizr.dsl.identifier" : "ss.wa.as"
+          },
+          "relationships" : [ {
+            "description" : "Reads from and writes to",
+            "destinationId" : "17",
+            "id" : "21",
+            "sourceId" : "13",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component,Service",
+          "technology" : "Java"
+        }, {
+          "description" : "Artist of the day",
+          "documentation" : { },
+          "id" : "14",
+          "name" : "Artist of the day",
+          "properties" : {
+            "structurizr.dsl.identifier" : "ss.wa.aotd"
+          },
+          "relationships" : [ {
+            "description" : "Get Artist of the day from",
+            "destinationId" : "15",
+            "id" : "22",
+            "sourceId" : "14",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component,Service",
+          "technology" : "Java"
+        }, {
+          "description" : "Selects artist of the day. If already selected of today we return it. If not we select a new one and save it to the database",
+          "documentation" : { },
+          "id" : "15",
+          "name" : "Artist of the day service",
+          "properties" : {
+            "structurizr.dsl.identifier" : "ss.wa.aotds"
+          },
+          "relationships" : [ {
+            "description" : "reads selected artist of the day from",
+            "destinationId" : "17",
+            "id" : "23",
+            "sourceId" : "15",
+            "tags" : "Relationship"
+          }, {
+            "description" : "writes selected artist of the day to",
+            "destinationId" : "17",
+            "id" : "24",
+            "sourceId" : "15",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component,Service",
+          "technology" : "Java"
+        }, {
+          "description" : "Handles track metadata persistence",
+          "documentation" : { },
+          "id" : "16",
+          "name" : "Track repository",
+          "properties" : {
+            "structurizr.dsl.identifier" : "ss.wa.tr"
+          },
+          "relationships" : [ {
+            "description" : "Reads from and writes to",
+            "destinationId" : "32",
+            "id" : "33",
+            "sourceId" : "16",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component,Service",
+          "technology" : "Java"
+        }, {
+          "description" : "Handles artist metadata persistence",
+          "documentation" : { },
+          "id" : "17",
+          "name" : "Artist repository",
+          "properties" : {
+            "structurizr.dsl.identifier" : "ss.wa.ar"
+          },
+          "relationships" : [ {
+            "description" : "Reads from and writes to",
+            "destinationId" : "32",
+            "id" : "35",
+            "sourceId" : "17",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component,Service",
+          "technology" : "Java"
+        } ],
         "documentation" : { },
         "id" : "5",
         "name" : "Web Application",
@@ -90,14 +354,14 @@
         },
         "relationships" : [ {
           "description" : "Reads from and writes to",
-          "destinationId" : "6",
-          "id" : "15",
-          "sourceId" : "5",
-          "tags" : "Relationship"
+          "destinationId" : "32",
+          "id" : "34",
+          "linkedRelationshipId" : "33",
+          "sourceId" : "5"
         }, {
           "description" : "Sends music metadata changes to",
           "destinationId" : "3",
-          "id" : "16",
+          "id" : "46",
           "sourceId" : "5",
           "tags" : "Relationship",
           "technology" : "via messaging queue"
@@ -106,7 +370,7 @@
       }, {
         "description" : "postgreSQL database",
         "documentation" : { },
-        "id" : "6",
+        "id" : "32",
         "name" : "Metadata storage",
         "properties" : {
           "structurizr.dsl.identifier" : "ss.db"
@@ -122,8 +386,8 @@
       "relationships" : [ {
         "description" : "Sends music metadata changes to",
         "destinationId" : "3",
-        "id" : "17",
-        "linkedRelationshipId" : "16",
+        "id" : "47",
+        "linkedRelationshipId" : "46",
         "sourceId" : "4",
         "technology" : "via messaging queue"
       } ],
@@ -132,14 +396,218 @@
   },
   "name" : "ICE Interview",
   "properties" : {
-    "structurizr.inspection.error" : "17",
-    "structurizr.dsl" : "d29ya3NwYWNlICJJQ0UgSW50ZXJ2aWV3IiAiRGVzaWduIGZvciBJQ0UgaW50ZXJ2aWV3IGV4ZXJjaXNlIiB7CgogICAgIWlkZW50aWZpZXJzIGhpZXJhcmNoaWNhbAoKICAgIG1vZGVsIHsKICAgICAgICBhID0gcGVyc29uICJBcnRpc3QiICJNdXNpYyBPd25lciIKICAgICAgICB1ID0gcGVyc29uICJVc2VyIiAiQnJvd3N3ZXMgbXVzaWMgcmVjb3JkIgogICAgICAgIGRsID0gc29mdHdhcmVTeXN0ZW0gIkRhdGEgTGFrZSIgewogICAgICAgICAgICB0YWdzICJFeHRlcm5hbCIKICAgICAgICB9CiAgICAgICAgc3MgPSBzb2Z0d2FyZVN5c3RlbSAiTXVzaWMgbWV0YWRhdGEgc3lzdGVtIiB7CiAgICAgICAgICAgIHdhID0gY29udGFpbmVyICJXZWIgQXBwbGljYXRpb24iCiAgICAgICAgICAgIGRiID0gY29udGFpbmVyICJNZXRhZGF0YSBzdG9yYWdlIiAicG9zdGdyZVNRTCBkYXRhYmFzZSIgewogICAgICAgICAgICAgICAgdGFncyAiRGF0YWJhc2UiCiAgICAgICAgICAgIH0KICAgICAgICB9CgogICAgICAgIGEgLT4gc3MgIk1hbmFnZSBteSBtdXNpYyBtZXRhZGF0YSBpbiIKICAgICAgICBhIC0+IHNzLndhICJBZGQgbXVzaWMgbWV0YWRhdGEgdG8gYSBjYXRhbG9ndWUgaW4iCiAgICAgICAgYSAtPiBzcy53YSAiRWRpdCBteSBtdXNpY3MgbWV0YWRhdGEgaW4iCiAgICAgICAgYSAtPiBzcy53YSAiTWFuYWdlIGFydGlzdCBhbGlhcyBpbiIKICAgICAgICBhIC0+IHNzLndhICJGZXRjaCBteSBtdXNpY3MgbWV0YWRhdGEgZnJvbSIKICAgICAgICB1IC0+IHNzLndhICJGZXRjaCBhcnRpc3Qgb2YgdGhlIGRheSBmcm9tIgogICAgICAgIHUgLT4gc3Mud2EgIkZldGNoIG11c2ljIG1ldGFkYXRhIGZyb20iCiAgICAgICAgc3Mud2EgLT4gc3MuZGIgIlJlYWRzIGZyb20gYW5kIHdyaXRlcyB0byIKICAgICAgICBzcy53YSAtPiBkbCAiU2VuZHMgbXVzaWMgbWV0YWRhdGEgY2hhbmdlcyB0byIgInZpYSBtZXNzYWdpbmcgcXVldWUiCiAgICB9CgogICAgdmlld3MgewoKICAgICAgICBzeXN0ZW1Db250ZXh0IHNzICJTeXN0ZW1Db250ZXh0IiAiV2UgYXJlIGZvY3VzaW5nIG9uIHRoZSBtdXNpYyBtZXRhZGF0YSBzeXN0ZW0uIFdlIGFyZSBhc3N1bWluZyB0aGF0IGFsbCByZXF1ZXN0cyBhcmUgZ29pbmcgdGhyb3VnaCBhbiBhcGkgZ2F0ZXdheSB0aGF0IHdpbGwgZm9yY2UgYXV0aGVudGljYXRpb24gd2hlbiBpdCBuZWVkcyB0byBhbmQgc2VuZHMgYW4gYXV0aGVudGljYXRpb24gdG9rZW4gdG8gdGhlIG11c2ljIG1ldGFkYXRhIHN5c3RlbSIgewogICAgICAgICAgICBpbmNsdWRlICoKICAgICAgICB9CgogICAgICAgIGNvbnRhaW5lciBzcyAiQ29udGFpbmVyIiB7CiAgICAgICAgICAgIGluY2x1ZGUgKgogICAgICAgIH0KCiAgICAgICAgc3R5bGVzIHsKICAgICAgICAgICAgZWxlbWVudCAiRWxlbWVudCIgewogICAgICAgICAgICAgICAgY29sb3IgIzA3NzNhZgogICAgICAgICAgICAgICAgc3Ryb2tlICMwNzczYWYKICAgICAgICAgICAgICAgIHN0cm9rZVdpZHRoIDcKICAgICAgICAgICAgICAgIHNoYXBlIHJvdW5kZWRib3gKICAgICAgICAgICAgfQogICAgICAgICAgICBlbGVtZW50ICJQZXJzb24iIHsKICAgICAgICAgICAgICAgIHNoYXBlIHBlcnNvbgogICAgICAgICAgICB9CiAgICAgICAgICAgIGVsZW1lbnQgIkRhdGFiYXNlIiB7CiAgICAgICAgICAgICAgICBzaGFwZSBjeWxpbmRlcgogICAgICAgICAgICB9CiAgICAgICAgICAgIGVsZW1lbnQgIkJvdW5kYXJ5IiB7CiAgICAgICAgICAgICAgICBzdHJva2VXaWR0aCA1CiAgICAgICAgICAgIH0KICAgICAgICAgICAgcmVsYXRpb25zaGlwICJSZWxhdGlvbnNoaXAiIHsKICAgICAgICAgICAgICAgIHRoaWNrbmVzcyA0CiAgICAgICAgICAgIH0KICAgICAgICB9CiAgICB9Cgp9",
     "structurizr.inspection.info" : "0",
     "structurizr.inspection.ignore" : "0",
-    "structurizr.inspection.warning" : "0"
+    "structurizr.inspection.error" : "38",
+    "structurizr.inspection.warning" : "0",
+    "structurizr.dsl" : "d29ya3NwYWNlICJJQ0UgSW50ZXJ2aWV3IiAiRGVzaWduIGZvciBJQ0UgaW50ZXJ2aWV3IGV4ZXJjaXNlIiB7CgogICAgIWlkZW50aWZpZXJzIGhpZXJhcmNoaWNhbAoKICAgIG1vZGVsIHsKICAgICAgICBhID0gcGVyc29uICJBcnRpc3QiICJNdXNpYyBPd25lciIKICAgICAgICB1ID0gcGVyc29uICJVc2VyIiAiQnJvd3N3ZXMgbXVzaWMgcmVjb3JkIgogICAgICAgIGRsID0gc29mdHdhcmVTeXN0ZW0gIkRhdGEgTGFrZSIgewogICAgICAgICAgICB0YWdzICJFeHRlcm5hbCIKICAgICAgICB9CiAgICAgICAgc3MgPSBzb2Z0d2FyZVN5c3RlbSAiTXVzaWMgbWV0YWRhdGEgc3lzdGVtIiB7CiAgICAgICAgICAgIHdhID0gY29udGFpbmVyICJXZWIgQXBwbGljYXRpb24iIHsKICAgICAgICAgICAgICAgIGdyb3VwICJkZW1vIiB7CiAgICAgICAgICAgICAgICAgICAgc3BhID0gY29tcG9uZW50ICJTaW5nbGUgUGFnZSBBcHBsaWNhdGlvbiIgIkRlbW9uc3RyYXRlcyBzeXN0ZW0gY2FwYWJpbGl0aWVzIiB7CiAgICAgICAgICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIlZhbmlsYSBKUyBhbmQgSFRNTCIKICAgICAgICAgICAgICAgICAgICAgICAgdGFncyAiRGVtbyIKICAgICAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICAgICAgbG9naW4gPSBjb21wb25lbnQgIkxvZ2luIiAiSGFuZGxlcyB1c2VyIGxvZ2luIGFuZCBhdXRoZW50aWNhdGlvbiIgewogICAgICAgICAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJWYW5pbGEgSlMgYW5kIEhUTUwiCiAgICAgICAgICAgICAgICAgICAgICAgIHRhZ3MgIkRlbW8iCiAgICAgICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgICAgIGF1dGhlbnRpY2F0aW9uID0gY29tcG9uZW50ICJBdXRoZW50aWNhdGlvbiIgIkhhbmRsZXMgdXNlciBhdXRoZW50aWNhdGlvbiIgewogICAgICAgICAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJTcHJpbmcgU2VjdXJpdHkiCiAgICAgICAgICAgICAgICAgICAgICAgIHRhZ3MgIkRlbW8iCiAgICAgICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgICAgIHNlZWQgPSBjb21wb25lbnQgIlNlZWQiICJTZWVkcyB0aGUgZGF0YWJhc2Ugd2l0aCBpbml0aWFsIGRhdGEiIHsKICAgICAgICAgICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiSmF2YSIKICAgICAgICAgICAgICAgICAgICAgICAgdGFncyAiRGVtbyIKICAgICAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICB0ID0gY29tcG9uZW50ICJUcmFjayBBUEkiICJNYW5hZ2VzIHRyYWNrIG1ldGFkYXRhIiB7CiAgICAgICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiSmF2YSIKICAgICAgICAgICAgICAgICAgICB0YWdzICJTZXJ2aWNlIgogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgdHMgPSBjb21wb25lbnQgIlRyYWNrIFNlcnZpY2UiICJNYW5hZ2VzIHRyYWNrIG1ldGFkYXRhIiB7CiAgICAgICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiSmF2YSIKICAgICAgICAgICAgICAgICAgICB0YWdzICJTZXJ2aWNlIgogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgYSA9IGNvbXBvbmVudCAiQXJ0aXN0IGFsaWFzIEFQSSIgIk1hbmFnZXMgYXJ0aXN0cyIgewogICAgICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIkphdmEiCiAgICAgICAgICAgICAgICAgICAgdGFncyAiU2VydmljZSIKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIGFzID0gY29tcG9uZW50ICJBcnRpc3Qgc2VydmljZSIgIkhhbmRsZXMgYXJ0aXN0IGFsaWFzIGNoYW5nZXMiIHsKICAgICAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJKYXZhIgogICAgICAgICAgICAgICAgICAgIHRhZ3MgIlNlcnZpY2UiCiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICBhb3RkID0gY29tcG9uZW50ICJBcnRpc3Qgb2YgdGhlIGRheSIgIkFydGlzdCBvZiB0aGUgZGF5IiB7CiAgICAgICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiSmF2YSIKICAgICAgICAgICAgICAgICAgICB0YWdzICJTZXJ2aWNlIgogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgYW90ZHMgPSBjb21wb25lbnQgIkFydGlzdCBvZiB0aGUgZGF5IHNlcnZpY2UiICJTZWxlY3RzIGFydGlzdCBvZiB0aGUgZGF5LiBJZiBhbHJlYWR5IHNlbGVjdGVkIG9mIHRvZGF5IHdlIHJldHVybiBpdC4gSWYgbm90IHdlIHNlbGVjdCBhIG5ldyBvbmUgYW5kIHNhdmUgaXQgdG8gdGhlIGRhdGFiYXNlIiB7CiAgICAgICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiSmF2YSIKICAgICAgICAgICAgICAgICAgICB0YWdzICJTZXJ2aWNlIgogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgdHIgPSBjb21wb25lbnQgIlRyYWNrIHJlcG9zaXRvcnkiICJIYW5kbGVzIHRyYWNrIG1ldGFkYXRhIHBlcnNpc3RlbmNlIiB7CiAgICAgICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiSmF2YSIKICAgICAgICAgICAgICAgICAgICB0YWdzICJTZXJ2aWNlIgogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgYXIgPSBjb21wb25lbnQgIkFydGlzdCByZXBvc2l0b3J5IiAiSGFuZGxlcyBhcnRpc3QgbWV0YWRhdGEgcGVyc2lzdGVuY2UiIHsKICAgICAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJKYXZhIgogICAgICAgICAgICAgICAgICAgIHRhZ3MgIlNlcnZpY2UiCiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICB0IC0+IHRzICJNYW5hZ2VzIHRyYWNrIG1ldGFkYXRhIGNoYW5nZXMiCiAgICAgICAgICAgICAgICB0cyAtPiB0ciAiUmVhZHMgZnJvbSBhbmQgd3JpdGVzIHRvIgogICAgICAgICAgICAgICAgYSAtPiBhcyAibWFuYWdlcyBhcnRpc3QgYWxpYXMgY2hhbmdlcyIKICAgICAgICAgICAgICAgIGFzIC0+IGFyICJSZWFkcyBmcm9tIGFuZCB3cml0ZXMgdG8iCiAgICAgICAgICAgICAgICBhb3RkIC0+IGFvdGRzICJHZXQgQXJ0aXN0IG9mIHRoZSBkYXkgZnJvbSIKICAgICAgICAgICAgICAgIGFvdGRzIC0+IGFyICJyZWFkcyBzZWxlY3RlZCBhcnRpc3Qgb2YgdGhlIGRheSBmcm9tIgogICAgICAgICAgICAgICAgYW90ZHMgLT4gYXIgIndyaXRlcyBzZWxlY3RlZCBhcnRpc3Qgb2YgdGhlIGRheSB0byIKICAgICAgICAgICAgICAgIHNwYSAtPiB0ICJGZXRjaGVzIHRyYWNrIG1ldGFkYXRhIGZyb20iCiAgICAgICAgICAgICAgICBzcGEgLT4gYSAiRmV0Y2hlcyBhcnRpc3QgbWV0YWRhdGEgZnJvbSIKICAgICAgICAgICAgICAgIGxvZ2luIC0+IGF1dGhlbnRpY2F0aW9uICJBdXRoZW50aWNhdGVzIHVzZXIiCiAgICAgICAgICAgICAgICBzcGEgLT4gc2VlZCAiU2VlZHMgdGhlIGRhdGFiYXNlIHdpdGggaW5pdGlhbCBkYXRhIgogICAgICAgICAgICAgICAgc3BhIC0+IGFvdGQgIkZldGNoZXMgYXJ0aXN0IG9mIHRoZSBkYXkgZnJvbSIKICAgICAgICAgICAgICAgIHNlZWQgLT4gdHIgIlNlZWRzIHRyYWNrIG1ldGFkYXRhIHRvIgogICAgICAgICAgICAgICAgc2VlZCAtPiBhciAiU2VlZHMgYXJ0aXN0IG1ldGFkYXRhIHRvIgogICAgICAgICAgICB9CiAgICAgICAgICAgIGRiID0gY29udGFpbmVyICJNZXRhZGF0YSBzdG9yYWdlIiAicG9zdGdyZVNRTCBkYXRhYmFzZSIgewogICAgICAgICAgICAgICAgdGFncyAiRGF0YWJhc2UiCiAgICAgICAgICAgIH0KICAgICAgICAgICAgd2EudHIgLT4gZGIgIlJlYWRzIGZyb20gYW5kIHdyaXRlcyB0byIKICAgICAgICAgICAgd2EuYXIgLT4gZGIgIlJlYWRzIGZyb20gYW5kIHdyaXRlcyB0byIKICAgICAgICB9CgogICAgICAgIGEgLT4gc3MgIk1hbmFnZSBteSBtdXNpYyBtZXRhZGF0YSBpbiIKICAgICAgICBhIC0+IHNzLndhLnQgIkFkZCBtdXNpYyBtZXRhZGF0YSB0byBhIGNhdGFsb2d1ZSBpbiIKICAgICAgICBhIC0+IHNzLndhLmEgIkVkaXQgbXkgbXVzaWNzIG1ldGFkYXRhIGluIgogICAgICAgIGEgLT4gc3Mud2EuYSAiTWFuYWdlIGFydGlzdCBhbGlhcyBpbiIKICAgICAgICBhIC0+IHNzLndhLnQgIkZldGNoIG15IG11c2ljcyBtZXRhZGF0YSBmcm9tIgogICAgICAgIHUgLT4gc3Mud2EuYW90ZCAiRmV0Y2ggYXJ0aXN0IG9mIHRoZSBkYXkgZnJvbSIKICAgICAgICB1IC0+IHNzLndhLnQgIkZldGNoIG11c2ljIG1ldGFkYXRhIGZyb20iCiAgICAgICAgc3Mud2EgLT4gZGwgIlNlbmRzIG11c2ljIG1ldGFkYXRhIGNoYW5nZXMgdG8iICJ2aWEgbWVzc2FnaW5nIHF1ZXVlIgogICAgICAgIGEgLT4gc3Mud2EubG9naW4gIkxvZ2luIHRvIG1hbmFnZSBteSBtdXNpYyBtZXRhZGF0YSBpbiIKICAgICAgICBhIC0+IHNzLndhLnNwYSAiTWFuYWdlIG15IG11c2ljIG1ldGFkYXRhIGluIgogICAgICAgIHUgLT4gc3Mud2Euc3BhICJCcm93c2UgbXkgbXVzaWMgbWV0YWRhdGEgaW4iCiAgICB9CgogICAgdmlld3MgewoKICAgICAgICBzeXN0ZW1Db250ZXh0IHNzICJTeXN0ZW1Db250ZXh0IiAiV2UgYXJlIGZvY3VzaW5nIG9uIHRoZSBtdXNpYyBtZXRhZGF0YSBzeXN0ZW0uIFdlIGFyZSBhc3N1bWluZyB0aGF0IGFsbCByZXF1ZXN0cyBhcmUgZ29pbmcgdGhyb3VnaCBhbiBhcGkgZ2F0ZXdheSB0aGF0IHdpbGwgZm9yY2UgYXV0aGVudGljYXRpb24gd2hlbiBpdCBuZWVkcyB0byBhbmQgc2VuZHMgYW4gYXV0aGVudGljYXRpb24gdG9rZW4gdG8gdGhlIG11c2ljIG1ldGFkYXRhIHN5c3RlbSIgewogICAgICAgICAgICBpbmNsdWRlICoKICAgICAgICB9CgogICAgICAgIGNvbnRhaW5lciBzcyAiQ29udGFpbmVyIiB7CiAgICAgICAgICAgIGluY2x1ZGUgKgogICAgICAgIH0KCiAgICAgICAgY29tcG9uZW50IHNzLndhICJXZWJBcHBsaWNhdGlvbi1jb250ZXh0IiB7CiAgICAgICAgICAgIGluY2x1ZGUgKgogICAgICAgIH0KCiAgICAgICAgZmlsdGVyZWQgIldlYkFwcGxpY2F0aW9uLWNvbnRleHQiIGV4Y2x1ZGUgIkRlbW8iICJXZWJBcHBsaWNhdGlvbi1jb250ZXh0MSIKICAgICAgICBmaWx0ZXJlZCAiV2ViQXBwbGljYXRpb24tY29udGV4dCIgaW5jbHVkZSAiRGVtbyxSZWxhdGlvbnNoaXAsUGVyc29uLFNlcnZpY2UiICJXZWJBcHBsaWNhdGlvbi1jb250ZXh0MiIKCgogICAgICAgIHN0eWxlcyB7CiAgICAgICAgICAgIGVsZW1lbnQgIkVsZW1lbnQiIHsKICAgICAgICAgICAgICAgIGNvbG9yICMwNzczYWYKICAgICAgICAgICAgICAgIHN0cm9rZSAjMDc3M2FmCiAgICAgICAgICAgICAgICBzdHJva2VXaWR0aCA3CiAgICAgICAgICAgICAgICBzaGFwZSByb3VuZGVkYm94CiAgICAgICAgICAgIH0KICAgICAgICAgICAgZWxlbWVudCAiUGVyc29uIiB7CiAgICAgICAgICAgICAgICBzaGFwZSBwZXJzb24KICAgICAgICAgICAgfQogICAgICAgICAgICBlbGVtZW50ICJEYXRhYmFzZSIgewogICAgICAgICAgICAgICAgc2hhcGUgY3lsaW5kZXIKICAgICAgICAgICAgfQogICAgICAgICAgICBlbGVtZW50ICJCb3VuZGFyeSIgewogICAgICAgICAgICAgICAgc3Ryb2tlV2lkdGggNQogICAgICAgICAgICB9CiAgICAgICAgICAgIHJlbGF0aW9uc2hpcCAiUmVsYXRpb25zaGlwIiB7CiAgICAgICAgICAgICAgICB0aGlja25lc3MgNAogICAgICAgICAgICB9CiAgICAgICAgfQogICAgfQoKfQ=="
   },
   "views" : {
+    "componentViews" : [ {
+      "containerId" : "5",
+      "dimensions" : {
+        "height" : 2872,
+        "width" : 4260
+      },
+      "elements" : [ {
+        "id" : "1",
+        "x" : 199,
+        "y" : 1349
+      }, {
+        "id" : "2",
+        "x" : 199,
+        "y" : 899
+      }, {
+        "id" : "6",
+        "x" : 1089,
+        "y" : 1174
+      }, {
+        "id" : "7",
+        "x" : 1089,
+        "y" : 715
+      }, {
+        "id" : "8",
+        "x" : 1879,
+        "y" : 715
+      }, {
+        "id" : "9",
+        "x" : 1879,
+        "y" : 1067
+      }, {
+        "id" : "10",
+        "x" : 1879,
+        "y" : 260
+      }, {
+        "id" : "11",
+        "x" : 2710,
+        "y" : 315
+      }, {
+        "id" : "12",
+        "x" : 1879,
+        "y" : 2074
+      }, {
+        "id" : "13",
+        "x" : 2719,
+        "y" : 2074
+      }, {
+        "id" : "14",
+        "x" : 1879,
+        "y" : 1724
+      }, {
+        "id" : "15",
+        "x" : 2719,
+        "y" : 1724
+      }, {
+        "id" : "16",
+        "x" : 3509,
+        "y" : 468
+      }, {
+        "id" : "17",
+        "x" : 3405,
+        "y" : 1150
+      }, {
+        "id" : "32",
+        "x" : 0,
+        "y" : 0
+      } ],
+      "externalContainerBoundariesVisible" : false,
+      "key" : "WebApplication-context",
+      "name" : "Component View: Music metadata system - Web Application",
+      "order" : 3,
+      "relationships" : [ {
+        "id" : "18",
+        "vertices" : [ {
+          "x" : 2379,
+          "y" : 410
+        }, {
+          "x" : 2535,
+          "y" : 410
+        } ]
+      }, {
+        "id" : "19"
+      }, {
+        "id" : "20"
+      }, {
+        "id" : "21",
+        "vertices" : [ {
+          "x" : 3339,
+          "y" : 2224
+        } ]
+      }, {
+        "id" : "22"
+      }, {
+        "id" : "23"
+      }, {
+        "id" : "24",
+        "vertices" : [ {
+          "x" : 3105,
+          "y" : 1535
+        } ]
+      }, {
+        "id" : "25",
+        "vertices" : [ {
+          "x" : 1709,
+          "y" : 759
+        } ]
+      }, {
+        "id" : "26",
+        "vertices" : [ {
+          "x" : 1709,
+          "y" : 1587
+        } ]
+      }, {
+        "id" : "27"
+      }, {
+        "id" : "28",
+        "vertices" : [ {
+          "x" : 1709,
+          "y" : 1217
+        } ]
+      }, {
+        "id" : "29",
+        "vertices" : [ {
+          "x" : 1709,
+          "y" : 1484
+        } ]
+      }, {
+        "id" : "30"
+      }, {
+        "id" : "31"
+      }, {
+        "id" : "33"
+      }, {
+        "id" : "35"
+      }, {
+        "id" : "37",
+        "vertices" : [ {
+          "x" : 769,
+          "y" : 520
+        }, {
+          "x" : 1709,
+          "y" : 520
+        } ]
+      }, {
+        "id" : "39",
+        "vertices" : [ {
+          "x" : 769,
+          "y" : 2337
+        }, {
+          "x" : 1709,
+          "y" : 2337
+        } ]
+      }, {
+        "id" : "40",
+        "vertices" : [ {
+          "x" : 769,
+          "y" : 2224
+        } ]
+      }, {
+        "id" : "41",
+        "vertices" : [ {
+          "x" : 769,
+          "y" : 403
+        }, {
+          "x" : 1709,
+          "y" : 403
+        } ]
+      }, {
+        "id" : "42",
+        "vertices" : [ {
+          "x" : 769,
+          "y" : 1874
+        } ]
+      }, {
+        "id" : "45",
+        "vertices" : [ {
+          "x" : 769,
+          "y" : 212
+        }, {
+          "x" : 1709,
+          "y" : 212
+        } ]
+      }, {
+        "id" : "48",
+        "vertices" : [ {
+          "x" : 769,
+          "y" : 865
+        } ]
+      }, {
+        "id" : "49",
+        "vertices" : [ {
+          "x" : 1039,
+          "y" : 1549
+        } ]
+      }, {
+        "id" : "50",
+        "vertices" : [ {
+          "x" : 1039,
+          "y" : 1099
+        } ]
+      } ]
+    } ],
     "configuration" : {
+      "lastSavedView" : "WebApplication-context2",
+      "metadataSymbols" : "SquareBrackets",
       "styles" : {
         "elements" : [ {
           "strokeWidth" : 5,
@@ -182,7 +650,7 @@
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "6",
+        "id" : "32",
         "x" : 0,
         "y" : 0
       } ],
@@ -191,23 +659,30 @@
       "name" : "Container View: Music metadata system",
       "order" : 2,
       "relationships" : [ {
-        "id" : "10"
+        "id" : "34"
       }, {
-        "id" : "11"
+        "id" : "38"
       }, {
-        "id" : "12"
+        "id" : "43"
       }, {
-        "id" : "14"
-      }, {
-        "id" : "15"
-      }, {
-        "id" : "16"
-      }, {
-        "id" : "8"
-      }, {
-        "id" : "9"
+        "id" : "46"
       } ],
       "softwareSystemId" : "4"
+    } ],
+    "filteredViews" : [ {
+      "baseViewKey" : "WebApplication-context",
+      "key" : "WebApplication-context1",
+      "mode" : "Exclude",
+      "name" : "Filtered: Component View: Music metadata system - Web Application",
+      "order" : 4,
+      "tags" : [ "Demo" ]
+    }, {
+      "baseViewKey" : "WebApplication-context",
+      "key" : "WebApplication-context2",
+      "mode" : "Include",
+      "name" : "Filtered: Component View: Music metadata system - Web Application",
+      "order" : 5,
+      "tags" : [ "Demo", "Person", "Relationship", "Service" ]
     } ],
     "systemContextViews" : [ {
       "description" : "We are focusing on the music metadata system. We are assuming that all requests are going through an api gateway that will force authentication when it needs to and sends an authentication token to the music metadata system",
@@ -233,11 +708,11 @@
       "name" : "System Context View: Music metadata system",
       "order" : 1,
       "relationships" : [ {
-        "id" : "13"
+        "id" : "36"
       }, {
-        "id" : "17"
+        "id" : "44"
       }, {
-        "id" : "7"
+        "id" : "47"
       } ],
       "softwareSystemId" : "4"
     } ]
